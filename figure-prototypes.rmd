@@ -3,20 +3,100 @@ title: "R Notebook"
 output: html_notebook
 ---
 
-The [R plugin](https://www.jetbrains.com/help/pycharm/r-plugin-support.html) for IntelliJ-based IDEs provides
-handy capabilities to work with the [R Markdown](https://www.jetbrains.com/help/pycharm/r-markdown.html) files.
-To [add](https://www.jetbrains.com/help/pycharm/r-markdown.html#add-code-chunk) a new R chunk,
-position the caret at any line or the code chunk, then click "+".
+```{r libs_and_scripts, include = FALSE, echo = FALSE}
+library(tidyverse)
+library(ggplot2)
+library(hrbrthemes)
+library(ggpubr)
+library(grid)
+# Set Default Chunk Options
+knitr::opts_chunk$set(echo = FALSE)
 
-The code chunk appears:
-```{r}
+# Define constants
+seed_val <- 42
+
+colorblind_palette  <- c("#999999", "#E69F00", "#56B4E9", "#009E73",
+            "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+
+
+# Load source files
+set.seed(seed_val)
+source("00_aesthetic_utils.R")
+source("01_gen_fake_data.R")
+source("02_plot_predictors.R")
+source('03_plot_value_comparisons.R')
 ```
 
-Type any R code in the chunk, for example:
-```{r}
-mycars <- within (mtcars, {cyl <- ordered (cyl)})
-mycars
+# Preamble
+
+## Discovery Focus Implications
+
+In terms of presentation, what will be in the body of the manuscript versus an
+appendix is conditional on the analysis.
+
+# Predictors of Treatment Response
+## Single treatments
+```{r trt_pred, warning = FALSE, message = FALSE}
+pred_summary_df <- FakeDataForPredictorSummary()
+
+#pred_summary_plot <- PlotPredictorSummary(in.data = pred_summary_df)
+
+alt_pred <- PlotPredImportance(in.data = pred_summary_df)
+
+pubr_pred <- PlotPredPubr(in.data = pred_summary_df)
+
+pred_lollipop_plot <- PlotPredictorLollipop(in.data = pred_summary_df)
+
+#ThemePlot(pred_summary_plot)
+```
+#### All treatment subfigures on the same line, includes predictors for all treatments
+```{r pred_pubr, fig.height = 5, fig.width = 8, warning = FALSE, message = FALSE}
+pubr_pred
 ```
 
-Now, click the **Run** button on the chunk toolbar to [execute](https://www.jetbrains.com/help/pycharm/r-markdown.html#run-r-code) the chunk code. The result should be placed under the chunk.
-Click the **Knit and Open Document** to build and preview an output.
+#### Grid of treatment subfigures, includes predictors for all treatments
+```{r alt_pred, fig.height = 5, fig.width = 8, warning = FALSE, message = FALSE}
+ThemePlot(alt_pred)
+```
+
+#### Grid of treatment subfigures, only includes predictors relevant for the specific treatment
+```{r pred_lollipop_plot, fig.height = 5, fig.width = 8, warning = FALSE, message = FALSE}
+ThemePlot(pred_lollipop_plot)
+```
+
+## Augmented Interventions
+Variable importance plot for predicting response to each of the combination interventions that only includes predictors that aren't included in both of the single treatments.
+
+## Stage Differences
+1. Variable importance plot for predicting response to each of the interventions that only includes predictors that are important in stage two but not stage one.
+
+# Interpretable Model Summary
+## Purely Data-driven
+
+## Structured GAM
+Identify a small number of predictor categories.
+
+Analagous to multi-scale diagnostic tools (wrong phrasing, look up)
+
+# Comparing Treatment Policies
+## Minimize number of comparisons
+```{r val_comp, fig.height = 4, fig.width = 6, warning = FALSE, message = FALSE}
+# Call the function with specified treatment policy names
+policy_names <- c("Ensemble", "Interpretable", "Personalize\nStage One Only", "Best Single\nTreatment", "As-randomized")
+fake_val_data <- FakeDataForValueComparison(policy_names,
+                                            point_estimates = c(.65, .6, .475, .4, .3),
+                                            ci_half_widths = c(.15, .15, .15, .15, .1))
+
+fake_val_min_comp <- fake_val_data %>% filter(TreatmentPolicy %in% c("Ensemble", "Interpretable","As-randomized"))
+val_plot_multi <- PlotValueComparison(in.data = fake_val_data)
+val_plot_min <- PlotValueComparison(in.data = fake_val_min_comp)
+
+ThemePlot(val_plot_min)
+```
+## Include additional comparisons
+```{r val_comp_multi, fig.height = 4, fig.width = 6, warning = FALSE, message = FALSE}
+ThemePlot(val_plot_multi)
+```
+# Characterizing the Treatment Subgroups
+
