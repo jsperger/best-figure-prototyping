@@ -28,15 +28,8 @@ source("02_plot_predictors.R")
 source('03_plot_value_comparisons.R')
 ```
 
-# Preamble
-
-## Discovery Focus Implications
-
-In terms of presentation, what will be in the body of the manuscript versus an
-appendix is conditional on the analysis.
-
 # Predictors of Treatment Response
-## Single treatments
+### Single treatments
 ```{r trt_pred, warning = FALSE, message = FALSE}
 pred_summary_df <- FakeDataForPredictorSummary()
 
@@ -65,22 +58,33 @@ ThemePlot(alt_pred)
 ThemePlot(pred_lollipop_plot)
 ```
 
-## Augmented Interventions
+### Augmented Interventions
 Variable importance plot for predicting response to each of the combination interventions that only includes predictors that aren't included in both of the single treatments.
 
-## Stage Differences
+### Stage Differences
 1. Variable importance plot for predicting response to each of the interventions that only includes predictors that are important in stage two but not stage one.
+2. If there are very few or no differences, a combined variable importance plot for stages one and two with some designation of whether the predictor is for stage one, stage two, or both.
 
-# Interpretable Model Summary
+```{r temp, warning = FALSE, message = FALSE, include = FALSE}
+
+   if(FALSE){"
 ## Purely Data-driven
 
 ## Structured GAM
 Identify a small number of predictor categories.
 
-Analagous to multi-scale diagnostic tools (wrong phrasing, look up)
+Analagous to multi-scale diagnostic tools (wrong phrasing, look up)"
+}
+```
+## Estimated Treatment Policies
+Mocking up in `tikz`
 
-# Comparing Treatment Policies
-## Minimize number of comparisons
+1. Ensemble (approximated)
+2. Interpretable
+3. Comparison of assignments by stage and treatment policy
+
+## Comparing Treatment Policies
+### Small number of comparisons
 ```{r val_comp, fig.height = 4, fig.width = 6, warning = FALSE, message = FALSE}
 # Call the function with specified treatment policy names
 policy_names <- c("Ensemble", "Interpretable", "Personalize\nStage One Only", "Best Single\nTreatment", "As-randomized")
@@ -94,9 +98,8 @@ val_plot_min <- PlotValueComparison(in.data = fake_val_min_comp)
 
 ThemePlot(val_plot_min)
 ```
-## Include additional comparisons
+### Include additional policies
 ```{r val_comp_multi, fig.height = 4, fig.width = 6, warning = FALSE, message = FALSE}
 ThemePlot(val_plot_multi)
 ```
-# Characterizing the Treatment Subgroups
-
+## Characterizing the Treatment Subgroups

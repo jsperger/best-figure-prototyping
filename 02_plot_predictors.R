@@ -67,9 +67,9 @@ PlotPredPubr <- function(in.data, num_predictors = 5) {
     scale_y_continuous(limits = c(0, 1.5), breaks = c(0, .5, 1, 1.5), labels = c("0", "0.5", "1", "1.5")) +  # Set the x-axis limits
     facet_grid(~Treatment) +
     labs(y = "Magnitude of Effect", x = NULL,
-         color = "Effect on \nTreatment Efficacy",
-         linetype = "Effect on \nTreatment Efficacy",
-         label = "Effect on \nTreatment Efficacy") +  # Label axes
+         color = "Effect on Treatment Efficacy",
+         linetype = "Effect on Treatment Efficacy",
+         label = "Effect on Treatment Efficacy") +  # Label axes
     theme(axis.text.y = element_text(size = 8, angle = 30, hjust = 1),
           axis.text.x = element_text(size = 8),
     legend.position = "bottom")  # Smaller text, angled
