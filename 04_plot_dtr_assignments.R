@@ -47,16 +47,3 @@ PlotDTRAssignments <- function(in.data,
 
 
 
-
-source("01_gen_fake_data.R")
-
-dtr_assignments <- FakeDataForDTRAssignments()
-
-PlotDTRAssignments(dtr_assignments)
-
-
-
-
-
-
-
