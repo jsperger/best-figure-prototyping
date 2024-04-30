@@ -65,3 +65,48 @@ FakeDataForValueComparison <- function(policy_names, point_estimates = NULL, ci_
   return(val_df)
 }
 
+# FakeDataForDTRAssignments generates a simulated dataset for Dynamic Treatment Regimes (DTR).
+# It assigns stage 1 treatments and stage 2 actions based on predefined probabilities.
+# 
+# Args:
+#   n_participants: An integer, the number of participants in the study (default 800).
+#   stage1_treatments: A character vector specifying the treatments available in stage 1.
+#   stage2_actions: A character vector specifying the possible actions in stage 2.
+#   stage2_treatments: A character vector specifying the treatments available in stage 2 (not used in the function but might be used later).
+#
+# Returns:
+#   A tibble with columns for stage1 allocation, x (randomly generated), and stage2 action allocation.
+#
+# Example:
+#   FakeDataForDTRAssignments(100, c("A", "B", "C"), c('maintain', 'augment', 'switch'), c("X", "Y", "Z"))
+#
+# Needs to create arguments to control probabilites of assignment.
+# 
+FakeDataForDTRAssignments <- function(n_participants = 800,
+                                      stage1_treatments = c("ESC", "EBEM", "ACT", "Duloxetine"), 
+                                      stage2_actions = c("Maintain", "Augment", "Switch"), 
+                                      stage2_treatments = c("ESC", "EBEM", "ACT", "Duloxetine")){
+  
+  # Generate a tibble with stage 1 allocations and a random normal variable 'x'
+  tibble(
+    stage1_allocation = sample(stage1_treatments, size = n_participants, replace = TRUE, 
+                               prob = c(0.4, 0.4, 0.1, 0.1)), 
+    x = rnorm(n = n_participants)
+  ) %>% 
+    rowwise() %>% 
+    # Assign stage 2 actions based on the stage 1 allocation and specific probabilities
+    mutate(stage2_action_allocation = case_when(
+      stage1_allocation == "ACT" ~ sample(stage2_actions, size = 1, replace = TRUE, 
+                                          prob = c(0.5, 0.4, 0.1)), 
+      stage1_allocation == "Duloxetine" ~ sample(stage2_actions, size = 1, replace = TRUE, 
+                                                 prob = c(0.5, 0.5, 0)),
+      stage1_allocation == "EBEM" ~ sample(stage2_actions, size = 1, replace = TRUE, 
+                                           prob = c(0.5, 0, 0.5)),
+      stage1_allocation == "ESC" ~ sample(stage2_actions, size = 1, replace = TRUE, 
+                                          prob = c(0.1, 0.9, 0))
+    ))
+}
+
+
+
+
