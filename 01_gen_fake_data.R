@@ -3,7 +3,7 @@
 #' @description This function generates fake data for the Predictor Summary
 #' @param treatments A vector of strings containing the treatment names to generate data for
 #'
-FakeDataForPredictorSummary <- function(treatments = c("eSOC", "EBEM", "ACT", "Duloxetine")) {
+FakeDataForPredictorSummary <- function(treatments = c("ESC", "EBEM", "ACT", "Duloxetine")) {
         # Create a data frame
         test_data <- expand.grid(
                 Predictor = c(
