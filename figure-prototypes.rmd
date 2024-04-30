@@ -30,6 +30,7 @@ source("01_gen_fake_data.R")
 source("02_plot_predictors.R")
 source('03_plot_value_comparisons.R')
 source('04_plot_dtr_assignments.R')
+source('05_plot_forest_subgroups.R')
 ```
 
 # Predictors of Treatment Response
@@ -116,4 +117,44 @@ ThemePlot(val_plot_min)
 ```{r val_comp_multi, fig.height = 4, fig.width = 6, warning = FALSE, message = FALSE}
 ThemePlot(val_plot_multi)
 ```
+
 ## Characterizing the Treatment Subgroups
+
+### Forest Plot for Subgroups
+
+```{r}
+dtr_data <- tibble(
+  subgroup = c("Overall", "Age <=65 yr", "Age > 65", "Years cLBP >5", "Years cLBP <=5",
+               "Anxiety +", "Anxiety -"), # ... continue for all subgroups
+  value = c(1, 1.1, 0.6, 0.7, 1.2, 1.3, 0.65),
+  method = 'Personalized Treatments'
+) %>% 
+  mutate(subgroup = factor(subgroup, 
+                           levels = rev(c("Overall", subgroup[which(subgroup != 'Overall')]))))
+
+trial_average_data <- tibble(
+  subgroup = c("Overall", "Age <=65 yr", "Age > 65", "Years cLBP >5", "Years cLBP <=5",
+               "Anxiety +", "Anxiety -"), # ... continue for all subgroups
+  value = c(0.85, 0.8, 0.9, 1, 0.72, 1, 0.8),
+  method = 'Trial Average'
+) %>% 
+  mutate(subgroup = factor(subgroup, 
+                           levels = rev(c("Overall", subgroup[which(subgroup != 'Overall')]))))
+
+
+pdat <- bind_rows(dtr_data, trial_average_data)
+
+segments_data <- pdat %>%
+    pivot_wider(id_cols = subgroup,names_from = method,
+                values_from = value) %>% 
+    janitor::clean_names() %>%
+    mutate(
+      diff = personalized_treatments - trial_average,
+      color = ifelse(diff > 0, "Positive", "Negative")
+    )
+
+PlotSubgroupForest(value_data = pdat, segments_data = segments_data)
+
+```
+
+
