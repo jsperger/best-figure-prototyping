@@ -104,7 +104,15 @@ FakeDataForDTRAssignments <- function(n_participants = 800,
                                            prob = c(0.5, 0, 0.5)),
       stage1_allocation == "ESC" ~ sample(stage2_actions, size = 1, replace = TRUE, 
                                           prob = c(0.1, 0.9, 0))
-    ))
+    ), 
+    stage2_treatment_allocation = case_when(
+      stage2_action_allocation == 'Maintain' ~ stage1_allocation, 
+      stage2_action_allocation %in% c('Augment',
+                                      "Switch") ~ sample(stage2_treatments[which(stage2_treatments != stage1_allocation)],
+                                                     size = 1)
+    ), 
+    stage1_allocation = paste0("S1: ", stage1_allocation),
+    stage2_treatment_allocation = paste0("S2: ", stage2_treatment_allocation))
 }
 
 
