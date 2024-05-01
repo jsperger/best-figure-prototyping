@@ -83,28 +83,41 @@ FakeDataForValueComparison <- function(policy_names, point_estimates = NULL, ci_
 # Needs to create arguments to control probabilites of assignment.
 # 
 FakeDataForDTRAssignments <- function(n_participants = 800,
-                                      stage1_treatments = c("ESC", "EBEM", "ACT", "Duloxetine"), 
+                                      stage1_treatments = c("ACT", "Duloxetine", "EBEM", "ESC"), 
                                       stage2_actions = c("Maintain", "Augment", "Switch"), 
-                                      stage2_treatments = c("ESC", "EBEM", "ACT", "Duloxetine")){
+                                      stage2_treatments = c("ACT", "Duloxetine", "EBEM", "ESC"), 
+                                      stage1_trt_probs = c(0.25, 0.25, 0.25, 0.25), 
+                                      act_action_probs = c(0.1, 0.4, 0.5), 
+                                      dulox_action_probs = c(0.1, 0.4, 0.5), 
+                                      ebem_action_probs = c(0.1, 0.4, 0.5),
+                                      esc_action_probs = c(0.2, 0.8, 0)){
   
   # Generate a tibble with stage 1 allocations and a random normal variable 'x'
   tibble(
     stage1_allocation = sample(stage1_treatments, size = n_participants, replace = TRUE, 
-                               prob = c(0.4, 0.4, 0.1, 0.1)), 
+                               prob = stage1_trt_probs), 
     x = rnorm(n = n_participants)
   ) %>% 
     rowwise() %>% 
     # Assign stage 2 actions based on the stage 1 allocation and specific probabilities
     mutate(stage2_action_allocation = case_when(
       stage1_allocation == "ACT" ~ sample(stage2_actions, size = 1, replace = TRUE, 
-                                          prob = c(0.5, 0.4, 0.1)), 
+                                          prob = act_action_probs), 
       stage1_allocation == "Duloxetine" ~ sample(stage2_actions, size = 1, replace = TRUE, 
-                                                 prob = c(0.5, 0.5, 0)),
+                                                 prob = dulox_action_probs),
       stage1_allocation == "EBEM" ~ sample(stage2_actions, size = 1, replace = TRUE, 
-                                           prob = c(0.5, 0, 0.5)),
+                                           prob = ebem_action_probs),
       stage1_allocation == "ESC" ~ sample(stage2_actions, size = 1, replace = TRUE, 
-                                          prob = c(0.1, 0.9, 0))
-    ))
+                                          prob = esc_action_probs)
+    ), 
+    stage2_treatment_allocation = case_when(
+      stage2_action_allocation == 'Maintain' ~ stage1_allocation, 
+      stage2_action_allocation %in% c('Augment',
+                                      "Switch") ~ sample(stage2_treatments[which(stage2_treatments != stage1_allocation)],
+                                                     size = 1)
+    ), 
+    stage1_allocation = paste0("S1: ", stage1_allocation),
+    stage2_treatment_allocation = paste0("S2: ", stage2_treatment_allocation))
 }
 
 
