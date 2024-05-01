@@ -45,14 +45,20 @@ source('05_plot_forest_subgroups.R')
 
 # Introduction
 ## Goals for Today
+Discuss the analysis from the point of view of our shared scientific goals for
+the BEST trial to move pain medicine forward.
 
-## Topics
-### Today
+Cut through field-specific jargon by focusing on concrete examples of the
+elements of precision medicine. Discuss what that term means for everyone in
+terms of scientific questions.
+
+### Topics for today
+
 Discuss the parts of a precision medicine analysis
 
-### Not today
-Specifics of analyses for different endpoints
-Future analyses
+### Topics for later discussion
+- Specifics of analyses for different endpoints
+- Future analyses
 
 ## Scientific Goals of a Precision Medicine Analysis
 
@@ -90,10 +96,13 @@ pubr_pred
 ```
 
 ## Treatment Recommendations based on Patient Characteristics
-Placeholder for example decision tree
+Side by Side Figures
+- Placeholder for example decision tree
+- Placeholder for example integer scoring model
 
-## Treatment Recommendations based on Patient Characteristics
-Placeholder for example integer scoring model
+The way that decisions are made about what treatment to recommend a patient need
+to be transparent, scientifically sensible, and comprehensible to patients and
+providers.
 
 ## Understanding Treatment Recommendations
 Treatment Recommendations from a discovery-focused trial share similarities with
@@ -107,7 +116,7 @@ role of dosages:
 Unlike dose-finding studies all of the BEST treatments are already used in
 treating cLBP. If personalization significantly reduces PEG compared to the
 as-randomized study outcomes it would be perfectly reasonable for early adopters
-to test the guidelines in their own practice.
+to test the recommendations in their own practice.
 
 We're reporting the *best* treatment recommendation, but there are likely many
 ways to make recommendations that perform very similarly.
@@ -130,8 +139,19 @@ val_plot_min <- PlotValueComparison(in.data = fake_val_min_comp) +
 ThemePlot(val_plot_min)
 ```
 
-## Characteristics of the Treatment Recommendations
+The confidence interval must account for the flexibility we have in estimating
+and selecting the way we will make the treatment recommendations.
 
+
+Answers the question "What's the benefit of incorporating patient
+characteristics into clinical decision making?"
+
+## Characteristics of the Treatment Recommendations
+Answers the question "What would following the treatment recommendations look
+like in practice?"
+
+PLACEHOLDER TABLE for treatment assignments as randomized and following
+recommendations.
 
 ## Proportion of Assigned Treatments - Trial Design Rule
 ```{r dtr_assignments, fig.height = 4, fig.width = 6, warning = FALSE, message = FALSE}
@@ -142,7 +162,7 @@ PlotDTRAssignments(dtr_assignments)
 ```
 
 
-## Proportion of Assigned Treatments - Complex ACT rule
+## Proportion of Assigned Treatments Under Example Recommendations
 ```{r dtr_assignments_complex, fig.height = 4, fig.width = 6, warning = FALSE, message = FALSE}
 #
 dtr_assignments <- FakeDataForDTRAssignments(stage1_trt_probs = c(0.6, 0.1, 0.2, 0.1),
@@ -152,12 +172,7 @@ dtr_assignments <- FakeDataForDTRAssignments(stage1_trt_probs = c(0.6, 0.1, 0.2,
                                              esc_action_probs = c(0.2, 0.8, 0))
 
 PlotDTRAssignments(dtr_assignments)
-```
 
-
-## Proportion of Assigned Treatments - Simple Rule (for one subgroup - perhaps)
-```{r dtr_assignments_simple, fig.height = 4, fig.width = 6, warning = FALSE, message = FALSE}
-#
 dtr_assignments <- FakeDataForDTRAssignments(stage1_trt_probs = c(0.6, 0, 0, 0.4),
                                              act_action_probs = c(0.6, 0.4, 0),
                                              dulox_action_probs = c(0.1, 0.8, 0.1),
@@ -166,7 +181,6 @@ dtr_assignments <- FakeDataForDTRAssignments(stage1_trt_probs = c(0.6, 0, 0, 0.4
 
 PlotDTRAssignments(dtr_assignments)
 ```
-
 
 ## Outcome Differences for Important Patient Characteristics
 
@@ -199,22 +213,34 @@ segments_data <- pdat %>%
     mutate(
       diff = personalized_treatments - trial_average,
       color = ifelse(diff > 0, "Positive", "Negative")
-    )
+    ) %>%
 
-PlotSubgroupForest(value_data = pdat, segments_data = segments_data)
+PlotSubgroupForest(value_data = pdat, segments_data = segments_data) +
+    ylab("Patient Characteristic")
 
 ```
 
+## Representative Patient Journeys
+PLACEHOLDER for how you can communicate with representative patient journeys
+which represent commonly encountered patient archetypes. See the treatments
+they're recommended, why, and the expected PEG.
+
 # Brief Notes on Future Discussions
-## 12- and 24-week Analyses
+## Future Discussions
+### 12- and 24-week Analyses
 The analyses are complementary, not identical analyses with two different
 endpoints.
 
 12-week
 - Outcomes: PGIC and PEG
+- Interventions: Single treatment only
 24-week
- - Outcomes: PEG only
+- Outcomes: PEG only
+- Interventions: combination and single treatments
+- Potential sequence effects
 
-## Future Analyses
+### Future Analyses
 We're reporting the *best* treatment recommendation, but there are likely many
 ways to make recommendations that perform very similarly.
+
+Consortium-wide data analyses and data integration.
