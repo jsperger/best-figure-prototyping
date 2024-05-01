@@ -43,6 +43,36 @@ source('04_plot_dtr_assignments.R')
 source('05_plot_forest_subgroups.R')
 ```
 
+
+<style>
+/* Custom CSS for tables */
+table {
+  width: 100%;
+}
+
+th, td {
+  border: 1px solid #cccccc;
+  text-align: center;
+  padding: 8px;
+}
+
+table th {
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Adjust font size for all table data */
+table th, table td {
+  font-size: 16px; /* Example font size */
+}
+
+/* Optional: Striped rows for better readability */
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+</style>
+
+
 # Introduction
 ## Goals for Today
 Discuss the analysis from the point of view of our shared scientific goals for
@@ -52,13 +82,24 @@ Cut through field-specific jargon by focusing on concrete examples of the
 elements of precision medicine. Discuss what that term means for everyone in
 terms of scientific questions.
 
-### Topics for today
-
-Discuss the parts of a precision medicine analysis
-
 ### Topics for later discussion
-- Specifics of analyses for different endpoints
-- Future analyses
+#### Specifics of 12- and 24-week Analyses
+The analyses are complementary, not identical analyses with two different
+endpoints.
+
+12-week
+- Outcomes: PGIC and PEG
+- Interventions: Single treatment only
+
+24-week
+- Outcomes: PEG only
+- Interventions: combination and single treatments, potential sequence effects
+
+#### Future Analyses
+- We're reporting the *best* treatment recommendation, but there are likely other
+ways to make recommendations that perform similarly.
+
+- Consortium-wide data analyses and data integration.
 
 ## Scientific Goals of a Precision Medicine Analysis
 
@@ -95,22 +136,27 @@ pubr_pred <- PlotPredPubr(in.data = pred_summary_df)
 pubr_pred
 ```
 
-## Treatment Recommendations based on Patient Characteristics
-Side by Side Figures
-- Placeholder for example decision tree
-- Placeholder for example integer scoring model
+## Recommending Treatments
+Answers the question "What intervention would you recommend for this patient?"
 
-The way that decisions are made about what treatment to recommend a patient need
-to be transparent, scientifically sensible, and comprehensible to patients and
-providers.
 
-## Understanding Treatment Recommendations
+Treatment recommendation reasoning should be transparent, scientifically
+sensible, and comprehensible to patients and providers.
+
+<div style="display: flex; justify-content: space-around; align-items: flex-start; width: 100%;">
+  <img src="figure/pain-decision-tree.png" alt="Tree" title="This is my image"
+  style="flex: 1 1 45%; max-width: 45%; height: auto;"/>
+  <img src="figure/integer-model.png" alt="Integer Scores" title="This is my image"
+  style="flex: 1 1 45%; max-width: 45%; height: auto;"/>
+</div>
+
+## Treatment Recommendations and Dose-finding, an Analogy
 Treatment Recommendations from a discovery-focused trial share similarities with
 Phase II dose-finding trials where the ways to make recommendations play the
 role of dosages:
 
 - Further research is required to corroborate the efficacy of the treatment recommendations
-- The dosage to bring to Phase III can be the result of expert judgment and the
+- The results are not binding. The dosage to bring to Phase III can be the result of expert judgment and the
   trial results
 
 Unlike dose-finding studies all of the BEST treatments are already used in
@@ -118,12 +164,12 @@ treating cLBP. If personalization significantly reduces PEG compared to the
 as-randomized study outcomes it would be perfectly reasonable for early adopters
 to test the recommendations in their own practice.
 
-We're reporting the *best* treatment recommendation, but there are likely many
-ways to make recommendations that perform very similarly.
-
 
 
 ## Benefit of Incorporating Patient Characteristics
+Answers the question "What's the benefit of incorporating patient
+characteristics into clinical decision making?"
+
 ```{r val_comp, fig.height = 3, fig.width = 9, warning = FALSE, message = FALSE}
 # Call the function with specified treatment policy names
 policy_names <- c("Ensemble", "Following\nRecommended\nTreatments", "Personalize\nStage One Only", "Best Single\nTreatment", "As-randomized")
@@ -143,15 +189,32 @@ The confidence interval must account for the flexibility we have in estimating
 and selecting the way we will make the treatment recommendations.
 
 
-Answers the question "What's the benefit of incorporating patient
-characteristics into clinical decision making?"
-
 ## Characteristics of the Treatment Recommendations
 Answers the question "What would following the treatment recommendations look
-like in practice?"
+like in practice?" or "Who do the people who are recommended an intervention
+look like?"
 
-PLACEHOLDER TABLE for treatment assignments as randomized and following
-recommendations.
+```{r results='asis'}
+# Create the data frame
+data <- tibble(
+    `Treatment Strategy` =
+        c("Study Assignments", "Example Guideline One", "Example Guideline Two"),
+    Duloxetine = c("25%", "30%", "40%"),
+    ACT = c("25%", "70%", "10%"),
+    EBEM = c("25%", "0%", "40%"),
+    ESC = c("25%", "0%", "10%"),
+    Maintain = c("10%", "15%", "30%"),
+    Augment = c("40%", "70%", "45%"),
+    Switch = c("50%", "15%", "25%")
+)
+
+# Generate the table with enhanced aesthetic styling
+knitr::kable(data, "html", align = 'c', table.attr = "style='width:90%;'") %>%
+  kableExtra::kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"), # Using Bootstrap for responsive design
+    full_width = F, font_size = 24
+  )
+```
 
 ## Proportion of Assigned Treatments - Trial Design Rule
 ```{r dtr_assignments, fig.height = 4, fig.width = 6, warning = FALSE, message = FALSE}
@@ -213,7 +276,7 @@ segments_data <- pdat %>%
     mutate(
       diff = personalized_treatments - trial_average,
       color = ifelse(diff > 0, "Positive", "Negative")
-    ) %>%
+    )
 
 PlotSubgroupForest(value_data = pdat, segments_data = segments_data) +
     ylab("Patient Characteristic")
@@ -221,26 +284,8 @@ PlotSubgroupForest(value_data = pdat, segments_data = segments_data) +
 ```
 
 ## Representative Patient Journeys
-PLACEHOLDER for how you can communicate with representative patient journeys
+Can communicate with representative patient journeys
 which represent commonly encountered patient archetypes. See the treatments
 they're recommended, why, and the expected PEG.
 
-# Brief Notes on Future Discussions
-## Future Discussions
-### 12- and 24-week Analyses
-The analyses are complementary, not identical analyses with two different
-endpoints.
-
-12-week
-- Outcomes: PGIC and PEG
-- Interventions: Single treatment only
-24-week
-- Outcomes: PEG only
-- Interventions: combination and single treatments
-- Potential sequence effects
-
-### Future Analyses
-We're reporting the *best* treatment recommendation, but there are likely many
-ways to make recommendations that perform very similarly.
-
-Consortium-wide data analyses and data integration.
+Can be data-driven or clinician-suggested.
