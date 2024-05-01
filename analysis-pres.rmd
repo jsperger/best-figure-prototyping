@@ -1,0 +1,255 @@
+---
+title: "BEST Analysis Discussion"
+date: "`r Sys.Date()`"
+always_allow_html: true
+output:
+  ioslides_presentation:
+    toc: true
+    toc_depth: 2
+    slide_level: 3
+    widescreen: true
+    smaller: true
+  beamer_presentation:
+    keep_tex: true
+    toc: true
+    slide_level: 3
+---
+
+# Preamble, just for code folding
+
+```{r libs_and_scripts, include = FALSE, echo = FALSE}
+library(tidyverse)
+library(ggplot2)
+library(hrbrthemes)
+library(ggpubr)
+library(grid)
+library(networkD3)
+# Set Default Chunk Options
+knitr::opts_chunk$set(echo = FALSE)
+
+# Define constants
+seed_val <- 42
+
+colorblind_palette  <- c("#999999", "#E69F00", "#56B4E9", "#009E73",
+            "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+
+
+# Load source files
+set.seed(seed_val)
+source("00_aesthetic_utils.R")
+source("01_gen_fake_data.R")
+source("02_plot_predictors.R")
+source('03_plot_value_comparisons.R')
+source('04_plot_dtr_assignments.R')
+source('05_plot_forest_subgroups.R')
+```
+
+
+# Introduction
+## Overview
+Not covered:
+- Later analyses such as incorporating deep phenotyping, the 36-week outcome, and consortium-wide data analyses
+## Goals for today
+- Discuss a precision medicine approach to cLBP
+- Identify potential communication gaps related to precision medicine and address them
+
+# Precision Medicine Analysis
+## Key Components of a Precision Medicine Approach
+
+- Identify what treatment works best for each patient, formalized in treatment
+  guidelines
+- Discover what can predict response to each of the four study treatments
+
+These complement each other, on their own
+- knowing what predicts response to a treatment isn't enough to know which
+treatment to give a patient, and
+- knowing what treatment a patient should receive tells you nothing about what
+  predicts response to treatment.
+
+## Additional Components of a Precision Medicine Analysis
+- Estimate the potential benefit of incorporating patient information when
+  assigning treatments
+- Interrogate the treatment guidelines for scientific and health equity sensibility
+- Generate hypotheses for future research
+
+## General Analytic Approach
+
+Allow for a maximum of flexibility during discovery
+
+Minimize statistical inference to preserve power
+
+Employ inferential methods that account for the flexibility in the model
+selection process.
+
+# Key Results
+## Predictors of Treatment Efficacy
+```{r trt_pred, warning = FALSE, message = FALSE}
+pred_summary_df <- FakeDataForPredictorSummary()
+
+#pred_summary_plot <- PlotPredictorSummary(in.data = pred_summary_df)
+
+alt_pred <- PlotPredImportance(in.data = pred_summary_df)
+
+pubr_pred <- PlotPredPubr(in.data = pred_summary_df)
+
+pred_lollipop_plot <- PlotPredictorLollipop(in.data = pred_summary_df)
+
+#ThemePlot(pred_summary_plot)
+```
+
+Answers the question
+
+## Predicting The Best Treatment for a Patient
+
+Answers the question ``what treatment should I give this individual patient''
+
+## Augmented Interventions
+
+Variable importance plot for predicting response to each of the combination
+interventions that only includes predictors that aren't included in both of the
+single treatments.
+
+## Stage Differences
+1. Variable importance plot for predicting response to each of the interventions that only includes predictors that are important in stage two but not stage one.
+2. If there are very few or no differences, a combined variable importance plot for stages one and two with some designation of whether the predictor is for stage one, stage two, or both.
+
+```{r temp, warning = FALSE, message = FALSE, include = FALSE}
+
+   if(FALSE){"
+## Purely Data-driven
+
+## Structured GAM
+Identify a small number of predictor categories.
+
+Analagous to multi-scale diagnostic tools (wrong phrasing, look up)"
+}
+```
+# Estimating Treatment Guidelines
+Mocking up example decision trees and diagrams in `LaTeX`
+1. Ensemble (approximated) - actually let's not get into this because it won't
+   be used as the guidelines barring something extreme.
+2. Interpretable
+3. Comparison of assignments by stage and treatment policy
+
+
+## Methods for Interpretable, Comprehensible Guidelines
+1. Combine expert knowledge and data-driven methods
+
+a. Use expert knowledge to define meaningful subscale categories such as PROs,
+biomechanical assessments, etc.
+
+b. Use machine learning methods to both pick the subscale items in each category
+from the available options and to create a final guideline that combines the
+results on each subscale.
+
+2. Entirely Data-driven approaches
+
+Use machine learning methods to directly estimate the treatment guidelines
+subject to constraints about their complexity. Expert review is still used, but
+the suggested guidelines are entirely
+
+### Proportion of Assigned Treatments - Trial Design Rule
+```{r dtr_assignments, fig.height = 4, fig.width = 6, warning = FALSE, message = FALSE}
+#
+dtr_assignments <- FakeDataForDTRAssignments()
+
+PlotDTRAssignments(dtr_assignments)
+```
+
+
+### Proportion of Assigned Treatments - Complex ACT rule
+```{r dtr_assignments_complex, fig.height = 4, fig.width = 6, warning = FALSE, message = FALSE}
+#
+dtr_assignments <- FakeDataForDTRAssignments(stage1_trt_probs = c(0.6, 0.1, 0.2, 0.1),
+                                             act_action_probs = c(0.6, 0.1, 0.3),
+                                             dulox_action_probs = c(0.1, 0.8, 0.1),
+                                             ebem_action_probs = c(0.1, 0.4, 0.5),
+                                             esc_action_probs = c(0.2, 0.8, 0))
+
+PlotDTRAssignments(dtr_assignments)
+```
+
+
+### Proportion of Assigned Treatments - Simple Rule (for one subgroup - perhaps)
+```{r dtr_assignments_simple, fig.height = 4, fig.width = 6, warning = FALSE, message = FALSE}
+#
+dtr_assignments <- FakeDataForDTRAssignments(stage1_trt_probs = c(0.6, 0, 0, 0.4),
+                                             act_action_probs = c(0.6, 0.4, 0),
+                                             dulox_action_probs = c(0.1, 0.8, 0.1),
+                                             ebem_action_probs = c(0.1, 0.4, 0.5),
+                                             esc_action_probs = c(0.5, 0.5, 0))
+
+PlotDTRAssignments(dtr_assignments)
+```
+
+
+## Comparing Treatment Policies
+### Estimating the benefits of Personalization
+```{r val_comp, fig.height = 4, fig.width = 6, warning = FALSE, message = FALSE}
+# Call the function with specified treatment policy names
+policy_names <- c("Ensemble", "Interpretable", "Personalize\nStage One Only", "Best Single\nTreatment", "As-randomized")
+fake_val_data <- FakeDataForValueComparison(policy_names,
+                                            point_estimates = c(.65, .6, .475, .4, .3),
+                                            ci_half_widths = c(.15, .15, .15, .15, .1))
+
+fake_val_min_comp <- fake_val_data %>% filter(TreatmentPolicy %in% c("Ensemble", "Interpretable","As-randomized"))
+val_plot_multi <- PlotValueComparison(in.data = fake_val_data)
+val_plot_min <- PlotValueComparison(in.data = fake_val_min_comp)
+
+ThemePlot(val_plot_min)
+```
+Similar to dose-finding studies, further research is required to corrobate the
+efficacy of the treatment guidelines and potentia
+
+Unlike dose-finding studies all of the BEST treatments are already used in
+treating cLBP. If personalization significantly reduces PEG compared to the
+as-randomized study outcomes it would be perfectly reasonable for early adopters
+to test the guidelines in their own practice.
+
+## Characterizing the Treatment Subgroups
+
+### Forest Plot for Subgroups
+
+```{r}
+dtr_data <- tibble(
+  subgroup = c("Overall", "Age <=65 yr", "Age > 65", "Years cLBP >5", "Years cLBP <=5",
+               "Anxiety +", "Anxiety -"), # ... continue for all subgroups
+  value = c(1, 1.1, 0.6, 0.7, 1.2, 1.3, 0.65),
+  method = 'Personalized Treatments'
+) %>%
+  mutate(subgroup = factor(subgroup,
+                           levels = rev(c("Overall", subgroup[which(subgroup != 'Overall')]))))
+
+trial_average_data <- tibble(
+  subgroup = c("Overall", "Age <=65 yr", "Age > 65", "Years cLBP >5", "Years cLBP <=5",
+               "Anxiety +", "Anxiety -"), # ... continue for all subgroups
+  value = c(0.85, 0.8, 0.9, 1, 0.72, 1, 0.8),
+  method = 'Trial Average'
+) %>%
+  mutate(subgroup = factor(subgroup,
+                           levels = rev(c("Overall", subgroup[which(subgroup != 'Overall')]))))
+
+
+pdat <- bind_rows(dtr_data, trial_average_data)
+
+segments_data <- pdat %>%
+    pivot_wider(id_cols = subgroup,names_from = method,
+                values_from = value) %>%
+    janitor::clean_names() %>%
+    mutate(
+      diff = personalized_treatments - trial_average,
+      color = ifelse(diff > 0, "Positive", "Negative")
+    )
+
+PlotSubgroupForest(value_data = pdat, segments_data = segments_data)
+
+```
+
+# 12- and 24-week Analyses
+## Overview of Similarities and Differences
+12-week
+- Outcomes: PGIC and PEG
+-
+24-week
+ - Outcomes: PEG only
