@@ -1,3 +1,41 @@
+#' Creates an example plot where the treatment effect of one treatment
+#' diminishes with age, while the other increases with age, but the first
+#' treatment is always better regardless of age.
+CreateExDTRRespDifPlot <- function() {
+ # Create a data frame with the necessary data
+age <- seq(18, 90, by = 1)
+acupuncture <- seq(2.5, 1.5, length.out = length(age))
+tcm <- seq(0.25, 1.25, length.out = length(age))
+
+plot_data <- data.frame(
+  Age = rep(age, 2),
+  Expected_PEG_Reduction = c(acupuncture, tcm),
+  Treatment = rep(c("Acupuncture", "Meditation"), each = length(age))
+)
+
+# Create the plot
+pmed_plot <- ggplot(
+    data = plot_data,
+    aes(x = Age, y = Expected_PEG_Reduction, color = Treatment)) +
+  geom_line(linewidth = 1.2) +
+  scale_y_continuous(limits = c(0, 3), breaks = seq(0, 3, by = 1)) +
+  scale_x_continuous(limits = c(18, 90), breaks = seq(18, 90, by = 12)) +
+  labs(
+    subtitle =
+      "Why both treatment recommendations and response predictions are needed",
+    x = "Age",
+    y = "Expected PEG Reduction",
+    color = "Treatment Group"
+  ) +
+  theme_minimal(base_size = 15) +
+  theme(
+    legend.position = "top",
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    axis.title = element_text(face = "bold")
+  )
+
+    return(pmed_plot)
+}
 
 
 # Define the function to create the dot plot
