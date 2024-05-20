@@ -99,13 +99,47 @@ PlotPredictorLollipop <- function(in.data, num_predictors = 5) {
 }
 
 
-.PlotPredSlice <- function(in.data, num_predictors) {
-    top_pred_data<- in.data %>%
-    group_by(Treatment) %>%
-    top_n(num_predictors, abs(Magnitude)) %>%
-    ungroup() %>%
-    arrange(Treatment, desc(abs(Magnitude))) %>%
-    mutate(Predictor = factor(Predictor, levels = unique(Predictor)))
 
-    return(top_pred_data)
+
+.PlotPredSlice <- function(in.data, num_predictors, grouping_var = NULL) {
+  top_pred_data <- in.data %>%
+          group_by(Treatment) %>%
+          top_n(num_predictors, abs(Magnitude)) %>%
+          ungroup() %>%
+      arrange(Treatment, desc(abs(Magnitude))) %>%
+      mutate(Predictor = factor(Predictor, levels = unique(Predictor)))
+
+  if (!is.null(grouping_var)) {
+                top_pred_data <- top_pred_data %>%
+    arrange(Predictor, !!sym(grouping_var)) %>%
+    mutate(Predictor = factor(paste(Predictor, ":", !!sym(grouping_var)),
+      levels = unique(paste(Predictor, ":", !!sym(grouping_var)))))
+        }
+
+        return(top_pred_data)
+}
+
+PlotPredictorLollipopGrouped <- function(in.data, num_predictors = 5, grouping_var = NULL) {
+  # Filter and prepare data
+  in.data <- .PlotPredSlice(in.data = in.data, num_predictors = num_predictors, grouping_var = grouping_var)
+
+  # Define a set of shapes for the grouping variable levels
+  shape_levels <- levels(as.factor(in.data[[grouping_var]]))
+  shape_values <- c(16, 17, 18, 15, 4, 8, 3, 7, 12)  # Predefined shapes, add more if needed
+
+  # Create the lollipop chart
+  p <- ggplot(in.data, aes(x = Magnitude, y = Predictor, group = Predictor)) +
+    geom_segment(aes(xend = 0, yend = Predictor, color = Sign, linetype = Sign), size = .7) +
+    geom_point(aes(shape = !!sym(grouping_var), color = Sign), size = 2) +
+    scale_shape_manual(values = setNames(shape_values[1:length(shape_levels)], shape_levels)) +
+    scale_linetype_manual(values = c("Positive" = "solid", "Negative" = "dashed")) +
+    facet_wrap(~Treatment, scales = "free_y") +
+    labs(x = "Magnitude of Effect", y = NULL,
+         color = "Effect on \nTreatment Efficacy",
+         linetype = "Effect on \nTreatment Efficacy",
+         shape = paste("Levels of", grouping_var)) +
+    theme_minimal() +
+    theme(axis.text.y = element_text(angle = 0, hjust = 1))
+
+  return(p)
 }
