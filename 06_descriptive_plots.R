@@ -1,5 +1,40 @@
                                         # Descriptive figures
 
+                                        BeanPlotOutcomeByTreatment <- function(wide_data, outcome_name, color_vec) {
+                                                outcome_vals <- wide_data %>% pull(outcome_name)
+
+
+                                                bp_formula <- as.formula(paste0(outcome_name, " ~ Trt"))
+                                                bp <- beanplot::beanplot(bp_formula,
+                                                        data = wide_data,
+                                                        cutmin = min(outcome_vals),
+                                                        cutmax = max(outcome_vals),
+                                                        method = "jitter",
+                                                        col = color_vec[1:4]
+                                                )
+
+                                                return(bp)
+                                        }
+
+GGBeanPlot <- function(wide_data, outcome_name, timepoint_name = "12-week") {
+    outcome_vals <- wide_data %>% pull(outcome_name)
+    min_outcome <- min(outcome_vals)
+    max_outcome <- max(outcome_vals)
+
+    base_plot <- ggplot(aes(x = factor(Trt), y = .data[[outcome_name]]), data = wide_data)
+
+    bean_plot <- base_plot +
+            geom_violin() +
+            geom_jitter(height = 0.25, width = 0.25, ) +
+            scale_y_continuous(
+                    limits = c(min_outcome, max_outcome),
+                    breaks = seq(min_outcome, max_outcome, by = 1)
+            ) +        labs(x = "Treatment", y = paste(timepoint_name, outcome_name)) +
+theme(    panel.grid.minor = element_blank())
+
+    return(bean_plot)
+}
+
 PlotStackedBarChartByTreatment <- function(bar_data) {
   # Ensure the necessary columns are present
   if (!all(c("Treatment", "Responder", "Count") %in% colnames(bar_data))) {
