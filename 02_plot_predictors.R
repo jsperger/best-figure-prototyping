@@ -134,9 +134,9 @@ PlotPredictorLollipopGrouped <- function(in.data, num_predictors = 5, grouping_v
     scale_shape_manual(values = setNames(shape_values[1:length(shape_levels)], shape_levels)) +
     scale_linetype_manual(values = c("Positive" = "solid", "Negative" = "dashed")) +
     facet_wrap(~Treatment, scales = "free_y") +
-    labs(x = "Magnitude of Effect", y = NULL,
-         color = "Effect on \nTreatment Efficacy",
-         linetype = "Effect on \nTreatment Efficacy",
+    labs(x = "Magnitude of Effect (z-score)", y = NULL,
+         color = "Effect on \n Expected Treatment Efficacy",
+         linetype = "Effect on \n Expected Treatment Efficacy",
          shape = paste("Levels of", grouping_var)) +
     theme_minimal() +
     theme(axis.text.y = element_text(angle = 0, hjust = 1))
