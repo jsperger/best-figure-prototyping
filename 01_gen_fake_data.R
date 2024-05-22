@@ -206,20 +206,28 @@ TransformWideToLong <- function(wide_data) {
     return(long_data)
 }
 
-SummarizeDescriptiveOutcomes <- function(results_tbl_df) {
+SummarizeDescriptiveOutcomes <- function(results_tbl_df, include_fivenum = TRUE) {
 
-# Create summary table
-summary_tbl <- results_tbl_df %>%
-        group_by(Outcome, Trt) %>%
-        summarize(
-                Mean = mean(Value),
-                SD = sd(Value),
-                Min = min(Value),
-                Q1 = quantile(Value, 0.25),
-                Median = median(Value),
-                Q3 = quantile(Value, 0.75),
-                Max = max(Value)
-        )
-
+                                        # Create summary table
+                                        grouped_tbl <- results_tbl_df %>%
+                                            group_by(Outcome, Trt)
+    if (include_fivenum == TRUE) {
+            summary_tbl <- grouped_tbl %>%
+                    summarize(
+                            Mean = mean(Value),
+                            SD = sd(Value),
+                            Min = min(Value),
+                            Q1 = quantile(Value, 0.25),
+                            Median = median(Value),
+                            Q3 = quantile(Value, 0.75),
+                            Max = max(Value)
+                    )
+    } else {
+                 summary_tbl <- grouped_tbl %>%
+                         summarize(
+                                 Mean = mean(Value),
+                                 SD = sd(Value)
+                         )
+    }
     return(summary_tbl)
 }
