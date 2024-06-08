@@ -54,3 +54,12 @@ scratch_bryce.R
 
 # pdfs
 *.pdf
+
+# temp files
+.*~
+.*#
+*~
+*#
+
+# annoying mac file
+.DS_STORE
