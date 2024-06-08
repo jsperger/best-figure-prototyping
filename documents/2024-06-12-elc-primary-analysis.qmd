@@ -1,0 +1,161 @@
+---
+title: "BEST Primary Analysis"
+subtitle: "ELC Discussion"
+author: "John Sperger"
+date: "2024-06-12"
+always_allow_html: true
+format:
+  beamer:
+    pdf-engine: lualatex
+    classoption: professionalfonts, math-style=TeX, spacing = French
+    aspectratio: 169
+    slide-level: 3
+    keep_tex: true
+    mainfontoptions:
+      - Numbers = Proportional
+header-includes:
+  - \usepackage{mathtools}
+  - \usepackage{graphicx}
+  - \usepackage{subfig}
+  - \usepackage{longtable}
+  - \usepackage{booktabs}
+  - \usepackage{makecell}
+  - \usepackage{wrapfig}
+  - \usepackage{rotating}
+  - \usepackage[boxed,longend,linesnumbered]{algorithm2e}
+  - \usepackage[normalem]{ulem}
+  - \usepackage{amsmath}
+  - \usepackage{amssymb}
+  - \usepackage{capt-of}
+  - \usepackage{hyperref}
+  - \usepackage{tikz}
+  - \usetikzlibrary{shapes.geometric, arrows}
+  - \hypersetup{colorlinks=true, linkcolor=blue, filecolor=magenta, urlcolor=cyan, pdftitle={Overleaf Example}, pdfpagemode=FullScreen}
+  - \usepackage[style=verbose,backend=biber,isbn=false,url=false,doi=false,eprint=false,dashed=false]{biblatex}
+---
+
+# Preamble
+
+## Overview
+
+The next few slides are a high-level discussion, followed by concrete mock-ups
+for each of the two manuscripts.
+
+We will go through the mock tables and figures for the 12- and
+24-week manuscripts as they might appear in the manuscripts.
+
+Many of the figures will appear in both manuscripts with different contents.
+
+This is not exhaustive of everything that may be included in appendices.
+
+## Framing
+
+### Language Discussion
+
+### What does a precision medicine analysis look like
+
+### Why both "best patient" and "best treatment" analyses matter
+
+### Scientific framing
+
+# 12-week Paper
+## Descriptive summary of trial results
+### As-randomized outcomes
+
+## Model Descriptions
+### Interpretable Method discussion
+Not a table or figure, but an open item
+
+Trees don't seem as popular as expected
+
+### Ensemble model input table
+Table of included models
+(Appendix material most likely)
+
+### State the optimal DTRs for PEG and PGIC
+
+### Describe the (counterfactual) DTR assignments in the study population
+Under the DTR in this population what percentage of people do we expected to be
+assigned to each treatment?
+
+## What is the benefit of incorporating patient features?
+
+### Value versus as-randomized outcomes (benefit at the population level)
+Figure, expected value under DTR vs. as-randomized
+
+Under this DTR what percentage of people do we expect to augment/maintain/switch?
+
+How does this compare to study assignments and responder categories?
+
+### Stratified by assigned treatment?
+Requested by clinicians, but I don’t think this makes sense without subgroups because the populations will be different in the as-randomized and assigned by DTR groups. Note: Might be a way to get at what they want to know, think about it more.
+
+### Stratified by DTR subgroup (and treatment)
+As-randomized vs. DTR subgroup outcome comparison
+
+## Predictors of Treatment Response
+### Predictor magnitude figure
+Figure Variable importance metrics
+
+### Other variable importance metric figure
+E.g. Shapley values, one of the importance metrics for trees
+
+## Discussion of results for 12-week PEG and PGIC
+### Differences in optimal DTRs?
+### Differences in predictors of treatment response?
+
+## Discussion of results for participants with contraindications
+### Description of contraindicated populations for each treatment
+### DTR assignments by contraindication
+### Outcomes for those with contraindications
+
+# 24-week Paper
+## Descriptive summary of trial results
+### As-randomized outcomes
+
+## Model Descriptions
+### Interpretable Method discussion
+Listed for completeness, shouldn't require further discussion after the 12-week
+##discussion
+
+### Ensemble model input table
+Table of included models
+(Appendix material most likely)
+
+### State the optimal DTR for 24-week PEG
+
+### Describe the (counterfactual) DTR assignments in the study population
+Under the DTR in this population what percentage of people do we expected to be
+assigned to each treatment?
+
+## What is the benefit of incorporating patient features?
+
+### Value versus as-randomized outcomes (benefit at the population level)
+Figure, expected value under DTR vs. as-randomized
+
+Under this DTR what percentage of people do we expect to augment/maintain/switch?
+
+How does this compare to study assignments and responder categories?
+
+### Stratified by assigned treatment?
+Requested by clinicians, but I don’t think this makes sense without subgroups because the populations will be different in the as-randomized and assigned by DTR groups. Note: Might be a way to get at what they want to know, think about it more.
+
+### Stratified by DTR subgroup (and treatment)
+As-randomized vs. DTR subgroup outcome comparison
+
+## Predictors of Treatment Response
+### Predictor magnitude figure
+Figure Variable importance metrics
+
+### Other variable importance metric figure
+E.g. Shapley values, one of the importance metrics for trees
+
+## Discussion of results for 12-week and 24-week PEG
+### Differences in optimal DTRs?
+### Differences in predictors of treatment response?
+
+
+## Discussion of results for participants with contraindications
+### Description of contraindicated populations for each treatment
+### DTR assignments by contraindication
+### Outcomes for those with contraindications
