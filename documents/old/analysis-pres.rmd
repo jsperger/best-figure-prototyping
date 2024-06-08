@@ -35,12 +35,12 @@ colorblind_palette  <- c("#999999", "#E69F00", "#56B4E9", "#009E73",
 
 # Load source files
 set.seed(seed_val)
-source("00_aesthetic_utils.R")
-source("01_gen_fake_data.R")
-source("02_plot_predictors.R")
-source('03_plot_value_comparisons.R')
-source('04_plot_dtr_assignments.R')
-source('05_plot_forest_subgroups.R')
+source("../../code/00_aesthetic_utils.R")
+source("../../code/01_gen_fake_data.R")
+source("../../code/02_plot_predictors.R")
+source("../../code/03_plot_value_comparisons.R")
+source("../../code/04_plot_dtr_assignments.R")
+source("../../code/05_plot_forest_subgroups.R")
 ```
 
 

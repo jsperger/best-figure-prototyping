@@ -52,3 +52,5 @@ rsconnect/
 #bryce files
 scratch_bryce.R
 
+# pdfs
+*.pdf
