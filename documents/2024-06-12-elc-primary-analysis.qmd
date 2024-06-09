@@ -35,6 +35,37 @@ header-includes:
 ---
 
 # Preamble
+```{r libs_and_scripts}
+# Load necessary libraries
+library(tidyverse)
+library(kableExtra)
+library(fabricatr)
+library(ggplot2)
+library(ggpattern)
+library(beanplot)
+library(svglite)
+library(hrbrthemes)
+library(ggpubr)
+library(grid)
+
+# Set Default Chunk Options
+knitr::opts_chunk$set(echo = FALSE)
+
+# Define constants
+seed_val <- 42
+
+colorblind_palette  <- c("#999999", "#E69F00", "#56B4E9", "#009E73",
+                         "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+                                        # Load source files
+set.seed(seed_val)
+source("../code/00_aesthetic_utils.R")
+source("../code/01_gen_fake_data.R")
+source("../code/02_plot_predictors.R")
+source("../code/03_plot_value_comparisons.R")
+source("../code/04_plot_dtr_assignments.R")
+source("../code/05_plot_forest_subgroups.R")
+```
+
 
 ## Overview
 
@@ -52,9 +83,42 @@ This is not exhaustive of everything that may be included in appendices.
 
 ### Language Discussion
 
+This will be the language used in internal ongoing discussions, the design, and the primary analysis manuscripts.
+
+Nonbinding; field and journal specific terms will take precedence for manuscripts.
+
+#### Patient Characteristics
+
+#### Dynamic Treatment Regime (DTR)
+
+
 ### What does a precision medicine analysis look like
 
 ### Why both "best patient" and "best treatment" analyses matter
+```{r pmed_motivation_plot, fig.height = 3, fig.width = 7}
+ThemePlot(CreateExDTRRespDifPlot())
+```
+
+The optimal treatment recommendation is "always give meditation" in this
+example. Acupuncture gets less effective with age, while meditation gets more effective with age.
+
+
+
+Statistical recommendations are always in the context of a set of
+options and aren't sufficient to know what predicts treatment response:
+\begin{itemize}
+\item Features can effect treatment efficacy but not to a sufficient
+degree to change the reccommendation
+
+\item A feature may predict treatment response for all treatment options and not
+ distinguish who should receive what.
+
+\item Knowing what features predict treatment response isn't enough to know
+which treatment to recommend. There is no age (in a human lifespan) where
+acupuncture should be recommended in this example despite age reducing the
+effectiveness of meditation and increasing the effectiveness of acupuncture.
+\end{itemize}
+
 
 ### Scientific framing
 
