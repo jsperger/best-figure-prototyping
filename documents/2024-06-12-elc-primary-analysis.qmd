@@ -35,6 +35,7 @@ header-includes:
 ---
 
 # Preamble
+
 ```{r libs_and_scripts}
 # Load necessary libraries
 library(tidyverse)
@@ -75,7 +76,7 @@ for each of the two manuscripts.
 We will go through the mock tables and figures for the 12- and
 24-week manuscripts as they might appear in the manuscripts.
 
-Many of the figures will appear in both manuscripts with different contents.
+    Many of the figures will appear in both manuscripts with different contents.
 
 This is not exhaustive of everything that may be included in appendices.
 
@@ -92,7 +93,7 @@ Nonbinding; field and journal specific terms will take precedence for manuscript
 #### Dynamic Treatment Regime (DTR)
 
 
-### What does a precision medicine analysis look like
+## What does a precision medicine analysis look like
 
 ### Why both "best patient" and "best treatment" analyses matter
 ```{r pmed_motivation_plot, fig.height = 3, fig.width = 7}
@@ -102,7 +103,7 @@ ThemePlot(CreateExDTRRespDifPlot())
 The optimal treatment recommendation is "always give meditation" in this
 example. Acupuncture gets less effective with age, while meditation gets more effective with age.
 
-
+### Decision-support and Causal Prediction are complementary but distinct
 
 Statistical recommendations are always in the context of a set of
 options and aren't sufficient to know what predicts treatment response:
@@ -112,13 +113,14 @@ degree to change the reccommendation
 
 \item A feature may predict treatment response for all treatment options and not
  distinguish who should receive what.
-
-\item Knowing what features predict treatment response isn't enough to know
-which treatment to recommend. There is no age (in a human lifespan) where
-acupuncture should be recommended in this example despite age reducing the
-effectiveness of meditation and increasing the effectiveness of acupuncture.
 \end{itemize}
 
+Knowing what features predict treatment response isn't enough to know
+which treatment to recommend.
+
+There is no age (in a human lifespan) where acupuncture should be recommended in
+this example despite age reducing the effectiveness of meditation and increasing
+the effectiveness of acupuncture.
 
 ### Scientific framing
 
@@ -143,6 +145,53 @@ Under the DTR in this population what percentage of people do we expected to be
 assigned to each treatment?
 
 ## What is the benefit of incorporating patient features?
+
+### As-randomized Outcome Comparison
+
+Answers the question "What's the benefit of incorporating patient
+characteristics into clinical decision making?"
+
+```{r val_comp, fig.height = 3, fig.width = 9, warning = FALSE, message = FALSE}
+# Call the function with specified treatment policy names
+policy_names <- c("Ensemble", "Following\nRecommended\nTreatments", "Personalize\nStage One Only", "Best Single\nTreatment", "As-randomized")
+fake_val_data <- FakeDataForValueComparison(policy_names,
+                                            point_estimates = c(.65, .6, .475, .4, .3),
+                                            ci_half_widths = c(.15, .15, .15, .15, .1))
+
+fake_val_min_comp <- fake_val_data %>%
+    filter(TreatmentPolicy %in% c("Following\nRecommended\nTreatments", "As-randomized"))
+val_plot_min <- PlotValueComparison(in.data = fake_val_min_comp) +
+    ylab("Treatment Approach")
+
+ThemePlot(val_plot_min)
+```
+
+### Open Question: Adjusting for 12-week Comparisons
+
+Protocol primary objctive does not involve the 12-week outcomes
+
+Don't adjust for multiplicity
+
+Don't adjust for multiplicity across the two manuscripts, adjust within the 12-week paper
+
+
+
+#### Multiplicity Adjustment Strategies
+Step-down test: Only test 12-week if 24-week is significant
+
+### Open Questions (if adjusting for multiplicity)
+
+#### False Discovery Rate (FDR) or Family-Wise Error Rate (FWER) Control
+
+FDR is the proportion of false positives out of all rejected hypotheses
+
+FWER is the probability of making at least one false positive rejection
+
+FWER is stricter and implies FDR control
+
+#### What $\alpha$-level
+
+Standard $\alpha = .05$
 
 ### Value versus as-randomized outcomes (benefit at the population level)
 Figure, expected value under DTR vs. as-randomized
