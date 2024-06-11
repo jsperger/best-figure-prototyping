@@ -35,7 +35,7 @@ header-includes:
 ---
 
 # Preamble
-
+## R Header
 ```{r libs_and_scripts}
 # Load necessary libraries
 library(tidyverse)
@@ -70,31 +70,62 @@ source("../code/05_plot_forest_subgroups.R")
 
 ## Overview
 
+### Overview
 The next few slides are a high-level discussion, followed by concrete mock-ups
 for each of the two manuscripts.
+\vfill
 
 We will go through the mock tables and figures for the 12- and
 24-week manuscripts as they might appear in the manuscripts.
+\vfill
 
-    Many of the figures will appear in both manuscripts with different contents.
+Many of the figures will appear in both manuscripts with different contents.
+\vfill
 
 This is not exhaustive of everything that may be included in appendices.
 
-## Framing
+## Framing Discussion
 
+### Publication Strategy
+
+Co-publish manuscripts for the 12- and 24-week outcomes.
+
+\vfill
+There is precedent e.g. the GRADE trial published two results papers in the same issue of the New England Journal of Medicine.
 ### Language Discussion
 
 This will be the language used in internal ongoing discussions, the design, and the primary analysis manuscripts.
+\vfill
 
 Nonbinding; field and journal specific terms will take precedence for manuscripts.
+\vfill
 
-#### Patient Characteristics
+#### Patient Features
+- Biomarkers
+- Phenotypes
+- Phenotypic markers
+- Patient characteristics
+- Patient features
+
 
 #### Dynamic Treatment Regime (DTR)
 
+### Terms for DTR in the literature
+- Individualized Treatment Rule
+- Dynamic Treatment Regime
+- Treatment policy
+- Treatment recommendations
+- Policy (in CS and OR)
+- Automated clinical decision aid (this is not a 1:1 substitute)
+## Fundamental Questions in Precision Medicine
+### Fundamental Questions in Precision Medicine
+\begin{enumerate}
+\item For a specific patient, what is the best treatment?
+\vfill
 
-## What does a precision medicine analysis look like
-
+\item For a specific treatment, what patient features are most important for
+predicting treatment response?
+\end{enumerate}
 ### Why both "best patient" and "best treatment" analyses matter
 ```{r pmed_motivation_plot, fig.height = 3, fig.width = 7}
 ThemePlot(CreateExDTRRespDifPlot())
@@ -122,7 +153,75 @@ There is no age (in a human lifespan) where acupuncture should be recommended in
 this example despite age reducing the effectiveness of meditation and increasing
 the effectiveness of acupuncture.
 
-### Scientific framing
+### Analysis as Scientific Questions
+\begin{enumerate}
+\item "What were the observed outcomes in the trial?"
+\vfill
+
+\item "What is the benefit of incorporating patient features?"
+\vfill
+
+\item "For a specific patient, what is the best treatment?"
+\vfill
+
+\item "For a specific treatment, what patient features predict response to
+treatment?"
+\vfill
+
+\item "How did each of the above differ for patients with and without contraindications?"
+
+\end{enumerate}
+
+### Analysis as Scientific Questions Details
+#### "What were the observed outcomes in the trial?"
+Descriptive summary of the as-randomized outcomes
+\vfill \pause
+
+#### "What is the benefit of incorporating patient features?"
+
+Hypothesis test of the value of the estimated optimal DTR compared to the
+as-randomized outcomes.
+\vfill \pause
+
+#### "For a specific patient, what is the best treatment?"
+
+What is the DTR? For an interpretable DTR this can be calculated by hand. More
+complex models require a computer.
+\vfill
+
+What is the estimated impact of applying the DTR including the proportion of
+patients assigned to each treatment and changes in treatment efficacy.
+\vfill
+
+If successful, a clinician could reasonably justify applying the DTR published
+in the manuscript in their clinic. A further confirmatory trial would be needed
+for a higher level of certainty, but these are all treatments in use and if
+successful provide evidence supporting the use of the DTR.
+
+### Analysis as Scientific Questions Details
+#### "For a specific treatment, what patient features predict response to treatment?"
+
+For each treatment, which features most strongly predict whether a patient will
+respond to the treatment? Answered using variable importance plots for
+predictors of treatment response.
+
+Important for future research into new treatments and treatment mechanisms as
+well as for identifying patients who are unlikely to have successful response to
+any of the current treatment options.
+
+Can inform clinical judgment and supplement the recommendation from the DTR.
+
+\vfill \pause
+
+
+#### "How did each of the above differ for patients with and without contraindications?"
+
+## Future Work
+### Future Analyses
+  - Additional protocol objectives: patient preferences, deep phenotyping,
+    and the 36-week outcome.
+  - Investigating "nearly optimal" treatment recommendations and predictors of response to treatment that are nearly as good as those in the primary analysis.
+  - Consortium-wide data analyses and integration.
 
 # 12-week Paper
 ## Descriptive summary of trial results
