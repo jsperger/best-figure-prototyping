@@ -6,7 +6,7 @@ library(ggplot2)
 
 
 source("01_gen_fake_data.R")
-
+source("02_plot_predictors.R")
 
 source("101_plot_beibo.R")
 

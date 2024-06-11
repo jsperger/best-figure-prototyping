@@ -54,7 +54,8 @@ PlotTreatSqn.BZ <- function(in.data) {
               position = position_stack(vjust = 0.5),
               color = "white", size = 3, fontface = "bold") +
     scale_fill_brewer(type = "qual", palette = "Set2") +
-    labs(title = "Treatment Sequences",
+    labs(
+      # title = "Treatment Sequences",
          x = "Number of Participants", y = "Stage 1 Treatment") +
     theme_minimal() +
     theme(
@@ -76,9 +77,9 @@ PlotTreatSqn.BZ <- function(in.data) {
 
 PlotVarImportance.BZ <- function(in.data, num_predictors = 5) {
   
-  # in.data <- .PlotPredSlice(in.data = in.data, num_predictors = num_predictors) %>%
-  #   mutate(SignSymbol = ifelse(Sign == "Positive", "+", "-")) %>%
-  #   arrange(desc(abs(Magnitude)))
+  in.data <- .PlotPredSlice(in.data = in.data, num_predictors = num_predictors) %>%
+    mutate(SignSymbol = ifelse(Sign == "Positive", "+", "-")) %>%
+    arrange(desc(abs(Magnitude)))
   
   # Assuming your data is in a data frame
   plot.data <- in.data %>%
@@ -105,7 +106,7 @@ PlotVarImportance.BZ <- function(in.data, num_predictors = 5) {
                  , color = "black"
     ) +
     geom_point(size = 3
-               , shape = 20
+               , shape = 19
                # , position = position_dodge(width = 0.8)
     ) +
     # scale_color_manual(values = c("ESC (1)" = "red", "EBEM (2)" = "blue", "ACT (3)" = "green", "Duloxetine (4)" = "orange"),
@@ -114,8 +115,9 @@ PlotVarImportance.BZ <- function(in.data, num_predictors = 5) {
     #                    name = "Treatment") +
     # scale_linetype_manual(values = c("ESC" = "solid", "EBEM" = "dashed", "ACT" = "dotted", "Duloxetine" = "twodash"),
     #                       name = "Treatment") +
-    labs(title = "Variable Importance Plot",
-         x = "Magnitude of Effect", y = "Predictor Variable") +
+    labs(
+      # title = "Variable Importance Plot",
+         x = "Standardized Effect Size", y = "Patient Feature") +
     theme_minimal() +
     theme(plot.title = element_text(hjust = 0.5),
           panel.grid.major.y = element_blank(),
