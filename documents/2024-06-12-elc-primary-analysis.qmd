@@ -56,6 +56,7 @@ library(svglite)
 library(hrbrthemes)
 library(ggpubr)
 library(grid)
+library(gridExtra)
 
 # Set Default Chunk Options
 knitr::opts_chunk$set(echo = FALSE)
@@ -81,10 +82,10 @@ source("../code/06_descriptive_plots.R")
 
 #### Discussion Order
 
-1. Recap of past ELC discussions
-2.
-Start with a recap and high-level discussion before viewing the mock tables and figures for the primary analysis manuscripts.
-
+1. Recap of key points from past ELC discussions (check my understanding)
+2. Analysis scientific overview
+3. 12-week manuscript mock tables and figures
+4. 24-week manuscript mock tables and figures
 \vfill
 
 The mock tables and figures for the 12- and 24-week manuscripts are formatted as
@@ -397,17 +398,49 @@ those with contraindications.
 fake_stage_one_wide <- FakeDataDescriptiveAnalyses(n.subj = 804)
 fake_stage_one_long <- TransformWideToLong(fake_stage_one_wide)
 ```
+### Simple table 12-week PEG and PGIC
 
-### 12-week Descriptive Outcomes Figures
-```{r stageone_ggbean, fig.height = 4, fig.width = 7, fig.cap='BEST Trial 12-week ITT Outcomes by Treatment Assignment'}
+### Bean plot of 12-week PEG
+```{r stageone_ggbean_peg, fig.height = 3.5, fig.width = 7, fig.cap='BEST Trial 12-week ITT PEG by Treatment Assignment'}
 ggbp_one <- GGBeanPlot(
     wide_data = fake_stage_one_wide,
     outcome_name = "PEG"
 )
 
-ggbp_one
+ThemePlot(ggbp_one)+ theme(panel.grid.minor = element_blank())
 ```
 
+### Bean plot of 12-week PEG with quantiles
+
+```{r stageone_ggbean_peg_quantiles, fig.height = 3, fig.width = 6, fig.cap='BEST Trial 12-week ITT PEG by Treatment Assignment'}
+ggbp_two <- GGBeanPlot(
+    wide_data = fake_stage_one_wide,
+    outcome_name = "PEG",
+    violin_quantiles = c(.25, .5, .75)
+)
+
+
+ggbp_peg_themed <- ThemePlot(ggbp_two) + theme(panel.grid.minor = element_blank())
+ggbp_peg_themed
+```
+
+### Bean plot of 12-week PGIC with quantiles
+
+```{r stageone_ggbean_pgic_quantiles, fig.height = 3, fig.width = 6, fig.cap='BEST Trial 12-week PGIC by Treatment Assignment (ITT)'}
+ggbp_pgic <- GGBeanPlot(
+    wide_data = fake_stage_one_wide,
+    outcome_name = "PGIC",
+    violin_quantiles = c(.25, .5, .75)
+)
+
+ggbp_pgic_themed <- ThemePlot(ggbp_pgic)+ theme(panel.grid.minor = element_blank())
+```
+
+### Bean plot of 12-week PEG and PGIC with quantiles
+
+```{r stageone_ggbean_grid_quantiles, fig.height = 3.25, fig.width = 7, fig.cap='BEST Trial 12-week ITT Outcomes by Treatment Assignment'}
+gridExtra::grid.arrange(ggbp_peg_themed, ggbp_pgic_themed, ncol = 2)
+```
 
 ## Predictors of Treatment Response
 ### Predictor magnitude figure
