@@ -143,3 +143,64 @@ PlotPredictorLollipopGrouped <- function(in.data, num_predictors = 5, grouping_v
 
   return(p)
 }
+
+
+
+
+
+
+### Define the function to create a plot showing top Standardized Effect Size for Patient Feature  ### 
+
+PlotVarImportance.BZ <- function(in.data, num_predictors = 5) {
+  
+  in.data <- .PlotPredSlice(in.data = in.data, num_predictors = num_predictors) %>%
+    mutate(SignSymbol = ifelse(Sign == "Positive", "+", "-")) %>%
+    arrange(desc(abs(Magnitude)))
+  
+  # Assuming your data is in a data frame
+  plot.data <- in.data %>%
+    mutate(
+      Magnitude = ifelse(Sign == "Negative", -Magnitude, Magnitude),
+      Treatment = factor(Treatment, levels = c("ESC", "EBEM", "ACT", "Duloxetine")),
+      Predictor = factor(Predictor, levels = unique(Predictor)))
+  
+  
+  # Create the variable importance plot
+  p <- ggplot(plot.data, aes(x = Magnitude, y = Predictor
+                             , color = Treatment
+                             # , shape = Treatment
+                             # , linetype = Treatment
+  )
+  ) +
+    geom_vline(xintercept = 0, linetype = "dashed", color = "gray50") +
+    # geom_text(aes(label = TreatmentAbbrev), hjust = 1.5, vjust = 1.5, size=2) +
+    # geom_text(aes(label = Treatment), hjust = 1.5, vjust = 1.5, size=2) +
+    geom_segment(aes(x = 0, xend = Magnitude, yend = Predictor)
+                 # , arrow = arrow(length = unit(0.15, "cm"))
+                 # , size = 1
+                 # ,position = position_dodge(width = 0.8)
+                 , color = "black"
+    ) +
+    geom_point(size = 3
+               , shape = 19
+               # , position = position_dodge(width = 0.8)
+    ) +
+    # scale_color_manual(values = c("ESC (1)" = "red", "EBEM (2)" = "blue", "ACT (3)" = "green", "Duloxetine (4)" = "orange"),
+    #                    name = "Treatment") +
+    # scale_shape_manual(values = c("ESC" = 4, "EBEM" = 9, "ACT" = 13, "Duloxetine" = 0),
+    #                    name = "Treatment") +
+    # scale_linetype_manual(values = c("ESC" = "solid", "EBEM" = "dashed", "ACT" = "dotted", "Duloxetine" = "twodash"),
+    #                       name = "Treatment") +
+    labs(
+      # title = "Variable Importance Plot",
+      x = "Standardized Effect Size", y = "Patient Feature") +
+    theme_minimal() +
+    theme(plot.title = element_text(hjust = 0.5),
+          panel.grid.major.y = element_blank(),
+          panel.grid.minor.y = element_blank(),
+          legend.position = "bottom",
+          axis.text.y = element_text(size = 10))
+  
+  return(p)
+  
+}
