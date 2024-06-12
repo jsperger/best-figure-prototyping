@@ -638,7 +638,9 @@ Don't adjust for multiplicity across the two manuscripts, adjust within the 12-w
 
 
 #### Multiplicity Adjustment Strategies
-Step-down test: Only test 12-week if 24-week is significant
+(Prespecify we will) Only test 12-week if 24-week is significant
+
+Apply a standard adjustment method e.g. Benjamini-Hochberg
 
 ### Open Questions (if adjusting for multiplicity)
 
@@ -652,7 +654,6 @@ FWER is stricter and implies FDR control
 
 #### What $\alpha$-level
 
-Standard $\alpha = .05$
 
 ### Value versus as-randomized outcomes (benefit at the population level)
 Figure, expected value under DTR vs. as-randomized
@@ -661,15 +662,9 @@ Under this DTR what percentage of people do we expect to augment/maintain/switch
 
 How does this compare to study assignments and responder categories?
 
-### Stratified by assigned treatment?
-Requested by clinicians, but I don’t think this makes sense without subgroups because the populations will be different in the as-randomized and assigned by DTR groups. Note: Might be a way to get at what they want to know, think about it more.
-
-### Stratified by DTR subgroup (and treatment)
-As-randomized vs. DTR subgroup outcome comparison
-
-## Discussion of results for 12-week PEG and PGIC
-### Differences in optimal DTRs?
-### Differences in predictors of treatment response?
+### Discussion of results for 12-week PEG and PGIC
+#### Differences in optimal DTRs?
+#### Differences in predictors of treatment response?
 
 ## Discussion of results for participants with contraindications
 ### Description of contraindicated populations for each treatment
