@@ -65,6 +65,7 @@ source("../code/02_plot_predictors.R")
 source("../code/03_plot_value_comparisons.R")
 source("../code/04_plot_dtr_assignments.R")
 source("../code/05_plot_forest_subgroups.R")
+source("../code/06_descriptive_plots.R")
 ```
 
 
@@ -92,6 +93,7 @@ Co-publish manuscripts for the 12- and 24-week outcomes.
 
 \vfill
 There is precedent e.g. the GRADE trial published two results papers in the same issue of the New England Journal of Medicine.
+
 ### Language Discussion
 
 This will be the language used in internal ongoing discussions, the design, and the primary analysis manuscripts.
@@ -99,25 +101,40 @@ This will be the language used in internal ongoing discussions, the design, and 
 
 Nonbinding; field and journal specific terms will take precedence for manuscripts.
 \vfill
+\begin{columns}
+\begin{column}{0.5\textwidth}
 
-#### Patient Features
-- Biomarkers
-- Phenotypes
-- Phenotypic markers
-- Patient characteristics
-- Patient features
+Patient Features
+\begin{itemize}
+\item Biomarkers
+\item  Phenotypes
+\item  Phenotypic markers
+\item  Patient characteristics
+\item  Patient features
 
 
-#### Dynamic Treatment Regime (DTR)
+\end{itemize}
+\end{column}
+\hfill
+\begin{column}{0.5\textwidth}
 
-### Terms for DTR in the literature
-- Individualized Treatment Rule
-- Dynamic Treatment Regime
-- Treatment policy
-- Treatment recommendations
-- Policy (in CS and OR)
-- Automated clinical decision aid (this is not a 1:1 substitute)
+Dynamic Treatment Regime (DTR)
+\begin{itemize}
+\item  Individualized Treatment Rule
+\item  Dynamic Treatment Regime
+\item  Treatment policy
+\item  Treatment recommendations
+\item  Policy (in CS and OR)
+\item  Automated clinical decision aid (this is not a one-to-one substitute)
+
+
+\end{itemize}
+\end{column}
+\end{columns}
+
+
 ## Fundamental Questions in Precision Medicine
+
 ### Fundamental Questions in Precision Medicine
 \begin{enumerate}
 \item For a specific patient, what is the best treatment?
@@ -126,6 +143,7 @@ Nonbinding; field and journal specific terms will take precedence for manuscript
 \item For a specific treatment, what patient features are most important for
 predicting treatment response?
 \end{enumerate}
+
 ### Why both "best patient" and "best treatment" analyses matter
 ```{r pmed_motivation_plot, fig.height = 3, fig.width = 7}
 ThemePlot(CreateExDTRRespDifPlot())
@@ -173,6 +191,7 @@ treatment?"
 \end{enumerate}
 
 ### Analysis as Scientific Questions Details
+
 #### "What were the observed outcomes in the trial?"
 Descriptive summary of the as-randomized outcomes
 \vfill \pause
@@ -182,6 +201,7 @@ Descriptive summary of the as-randomized outcomes
 Hypothesis test of the value of the estimated optimal DTR compared to the
 as-randomized outcomes.
 \vfill \pause
+
 
 #### "For a specific patient, what is the best treatment?"
 
@@ -198,7 +218,9 @@ in the manuscript in their clinic. A further confirmatory trial would be needed
 for a higher level of certainty, but these are all treatments in use and if
 successful provide evidence supporting the use of the DTR.
 
+
 ### Analysis as Scientific Questions Details
+
 #### "For a specific treatment, what patient features predict response to treatment?"
 
 For each treatment, which features most strongly predict whether a patient will
@@ -217,6 +239,7 @@ Can inform clinical judgment and supplement the recommendation from the DTR.
 #### "How did each of the above differ for patients with and without contraindications?"
 
 ## Future Work
+
 ### Future Analyses
   - Additional protocol objectives: patient preferences, deep phenotyping,
     and the 36-week outcome.
