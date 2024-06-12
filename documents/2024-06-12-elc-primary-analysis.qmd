@@ -247,8 +247,24 @@ Can inform clinical judgment and supplement the recommendation from the DTR.
   - Consortium-wide data analyses and integration.
 
 # 12-week Paper
+
 ## Descriptive summary of trial results
-### As-randomized outcomes
+
+```{r descriptive_data}
+fake_stage_one_wide <- FakeDataDescriptiveAnalyses(n.subj = 804)
+fake_stage_one_long <- TransformWideToLong(fake_stage_one_wide)
+```
+
+### 12-week Descriptive Outcomes Figures
+```{r stageone_ggbean, fig.height = 4, fig.width = 7, fig.cap='BEST Trial 12-week ITT Outcomes by Treatment Assignment'}
+ggbp_one <- GGBeanPlot(
+    wide_data = fake_stage_one_wide,
+    outcome_name = "PEG"
+)
+
+ggbp_one
+```
+
 
 ## Model Descriptions
 ### Interpretable Method discussion
@@ -285,7 +301,7 @@ fake_val_min_comp <- fake_val_data %>%
 val_plot_min <- PlotValueComparison(in.data = fake_val_min_comp) +
     ylab("Treatment Approach")
 
-ThemePlot(val_plot_min)
+ThemePlot(val_plot_min) + coord_flip()
 ```
 
 ### Open Question: Adjusting for 12-week Comparisons
