@@ -409,21 +409,15 @@ ggbp_one
 ```
 
 
-## Model Descriptions
-### Interpretable Method discussion
-Not a table or figure, but an open item
+## Predictors of Treatment Response
+### Predictor magnitude figure
+Figure Variable importance metrics
 
-Trees don't seem as popular as expected
+### Other variable importance metric figure
 
-### Ensemble model input table
-Table of included models
-(Appendix material most likely)
 
-### State the optimal DTRs for PEG and PGIC
 
-### Describe the (counterfactual) DTR assignments in the study population
-Under the DTR in this population what percentage of people do we expected to be
-assigned to each treatment?
+E.g. Shapley values, one of the importance metrics for trees
 
 ## What is the benefit of incorporating patient features?
 
@@ -487,16 +481,6 @@ Requested by clinicians, but I don’t think this makes sense without subgroups 
 ### Stratified by DTR subgroup (and treatment)
 As-randomized vs. DTR subgroup outcome comparison
 
-## Predictors of Treatment Response
-### Predictor magnitude figure
-Figure Variable importance metrics
-
-### Other variable importance metric figure
-
-
-
-E.g. Shapley values, one of the importance metrics for trees
-
 ## Discussion of results for 12-week PEG and PGIC
 ### Differences in optimal DTRs?
 ### Differences in predictors of treatment response?
@@ -558,5 +542,22 @@ E.g. Shapley values, one of the importance metrics for trees
 ### Outcomes for those with contraindications
 
 # Statistical Methods
+## Model Descriptions
+### Interpretable Method discussion
+Not a table or figure, but an open item
+
+Trees don't seem as popular as expected
+
+### Ensemble model input table
+Table of included models
+(Appendix material most likely)
+
+### State the optimal DTRs for PEG and PGIC
+
+### Describe the (counterfactual) DTR assignments in the study population
+Under the DTR in this population what percentage of people do we expected to be
+assigned to each treatment?
+
 
 ## Predicting Response to Treatment
+
