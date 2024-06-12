@@ -10,6 +10,13 @@ format:
     classoption: professionalfonts, math-style=TeX, spacing = French
     aspectratio: 169
     slide-level: 3
+    toc: true
+    toc-location: left
+    toc-depth: 2
+    toc-expand: true
+    toc-title: Outline
+    number-sections: true
+    number-depth: 2
     keep_tex: true
     mainfontoptions:
       - Numbers = Proportional
@@ -30,12 +37,13 @@ header-includes:
   - \usepackage{hyperref}
   - \usepackage{tikz}
   - \usetikzlibrary{shapes.geometric, arrows}
-  - \hypersetup{colorlinks=true, linkcolor=blue, filecolor=magenta, urlcolor=cyan, pdftitle={Overleaf Example}, pdfpagemode=FullScreen}
+  - \hypersetup{colorlinks=true, linkcolor=blue, filecolor=magenta, urlcolor=cyan, pdftitle={BEST ELC Primary Analysis Discussion}, pdfpagemode=FullScreen}
   - \usepackage[style=verbose,backend=biber,isbn=false,url=false,doi=false,eprint=false,dashed=false]{biblatex}
 ---
 
-# Preamble
-## R Header
+# Overview
+
+## R Library header for folding
 ```{r libs_and_scripts}
 # Load necessary libraries
 library(tidyverse)
@@ -69,23 +77,29 @@ source("../code/06_descriptive_plots.R")
 ```
 
 
-## Overview
-
 ### Overview
-The next few slides are a high-level discussion, followed by concrete mock-ups
-for each of the two manuscripts.
+
+#### Discussion Order
+
+1. Recap of past ELC discussions
+2.
+Start with a recap and high-level discussion before viewing the mock tables and figures for the primary analysis manuscripts.
+
 \vfill
 
-We will go through the mock tables and figures for the 12- and
-24-week manuscripts as they might appear in the manuscripts.
+The mock tables and figures for the 12- and 24-week manuscripts are formatted as
+they might appear in the manuscripts\footnote{Numbers are entirely made up and
+not based on preliminary data in any way.}.
+
 \vfill
 
-Many of the figures will appear in both manuscripts with different contents.
-\vfill
+Standard components like the table of descriptive statistics and CONSORT flow
+diagram are not included. Appendix contents are also not included except where
+explicitly noted.
 
-This is not exhaustive of everything that may be included in appendices.
+# Summary of Recent Discussions
 
-## Framing Discussion
+## Publication and Communication Strategy Discussion
 
 ### Publication Strategy
 
@@ -93,6 +107,18 @@ Co-publish manuscripts for the 12- and 24-week outcomes.
 
 \vfill
 There is precedent e.g. the GRADE trial published two results papers in the same issue of the New England Journal of Medicine.
+
+### Future Analyses
+  - Additional protocol objectives: patient preferences, deep phenotyping,
+    and the 36-week outcome.
+   \vfill
+
+  - Investigating ``nearly optimal'' treatment recommendations and predictors of
+    response to treatment that are nearly as good as those in the primary
+    analysis.
+   \vfill
+
+  - Consortium-wide data analyses and integration.
 
 ### Language Discussion
 
@@ -132,17 +158,83 @@ Dynamic Treatment Regime (DTR)
 \end{column}
 \end{columns}
 
+## Key Points from Previous Discussions
+
+### Key Points
+
+- The study treatments are representative of classes of treatments rather than
+  fully optimized interventions.
+
+- Variable importance measurements can be unstable.
+
+Ex: Only one of anxiety and depression may be labeled as important depending on
+  the metric, but having one rather than the other would likely only have a
+  small impact\footnote{Setting aside negative affect, and feature construction
+  generally.}.
+
+- We need to appropriately communicate uncertainty which goes beyond choosing
+  appropriate statistical methods. (Elaborated on next slide)
+
+- The DTR is still the estimated optimal way to recommend treatments based on
+  the data from the BEST trial.
+
+### Key Discussion Points - Uncertainty Communication
+\begin{itemize}
+\item This is a complex analysis and is
+  discovery-focused, need to preempt misinterpretation of results as certainties
+  from the ``magic box'' of machine learning.
+\vfill
+
+\item Concerns that decision-lists or trees convey a high-level of certainty.
+\vfill
+
+\item There is no independent test data set (though we apply appropriate
+statistical methods to account for the flexible modeling process).
+\vfill
+
+Yes: If successful, a clinician could reasonably justify applying the DTR published
+in the manuscript in their clinic. The trial provides valid evidence by virtue
+of appropriately accounting for hypothesis-generation and modeling flexibility,
+and treatments are all currently used in clinical practice and efficacious.
+
+No: The trial provides conclusive evidence and no further research is needed to
+confirm that the estimated DTR is optimal.
+
+Yes:
+\end{itemize}
+
+### Future Confirmatory Studies (Drop or move to appendix?)
+A ``Phase III'' confirmatory trial which randomizes patients to receive
+treatment according to the estimated DTR vs. receiving treatment by some
+appropriate comparison method
+- Randomization
+- Clinical judgment without access to the DTR
+- Clinical judgment where the clinician has information about the treatment the
+  DTR estimates is optimal and an explanation for the algorithm's decision.
+
+\vfill \pause
+Similar trials happen in fields such as implementation science, but the
+intervention packages aren't developed in as systematic a way as the DTR from
+BEST.
+\vfill
+
+Aren't commonplace, but I (John) dream of a world where all treatment guidelines
+are put through this kind of testing, and when your doctor recommends an
+intervention to you, you can source the evidence for the
+recommendation\footnote{Not just single trials or systematic reviews}.
+
+# A Science-level View of the Analysis
 
 ## Fundamental Questions in Precision Medicine
 
 ### Fundamental Questions in Precision Medicine
-\begin{enumerate}
+\begin{itemize}
 \item For a specific patient, what is the best treatment?
 \vfill
 
 \item For a specific treatment, what patient features are most important for
 predicting treatment response?
-\end{enumerate}
+\end{itemize}
 
 ### Why both "best patient" and "best treatment" analyses matter
 ```{r pmed_motivation_plot, fig.height = 3, fig.width = 7}
@@ -171,24 +263,76 @@ There is no age (in a human lifespan) where acupuncture should be recommended in
 this example despite age reducing the effectiveness of meditation and increasing
 the effectiveness of acupuncture.
 
+
+## The Analysis in terms of Scientific Questions
+
 ### Analysis as Scientific Questions
 \begin{enumerate}
-\item "What were the observed outcomes in the trial?"
+\item ``What were the observed outcomes in the trial?''
+\vdots
+
+\setcounter{enumi}{4}
+
+\item ``How did each of the above differ for patients with and without contraindications?"
+\end{enumerate}
+
 \vfill
 
-\item "What is the benefit of incorporating patient features?"
+\begin{itemize}
+\item ``What is the benefit of incorporating patient features?''
 \vfill
 
-\item "For a specific patient, what is the best treatment?"
+\item ``For a specific patient, what is the best treatment?''
 \vfill
 
-\item "For a specific treatment, what patient features predict response to
-treatment?"
+\item ``For a specific treatment, what patient features predict response to
+treatment?''
+\vfill
+\end{itemize}
+
+
+
+### Analysis Question Ordering
+
 \vfill
 
-\item "How did each of the above differ for patients with and without contraindications?"
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\textbf{``Sequential ordering''}
+\begin{enumerate}
+\item ``For a specific treatment, what patient features predict response to
+treatment?''
+\vfill
+
+\item ``For a specific patient, what is the best treatment?''
+\vfill
+
+\item ``What is the benefit of incorporating patient features?''
+\vfill
 
 \end{enumerate}
+\end{column}
+\hfill
+\begin{column}{0.5\textwidth}
+
+\textbf{``Headline ordering''}
+\begin{enumerate}
+\item ``What is the benefit of incorporating patient features?''
+\vfill
+
+\item ``For a specific patient, what is the best treatment?''
+\vfill
+
+\item ``For a specific treatment, what patient features predict response to
+treatment?''
+\vfill
+\end{enumerate}
+\end{column}
+\end{columns}
+\vfill
+
+
+## Mapping Analyses to Scientific Questions
 
 ### Analysis as Scientific Questions Details
 
@@ -238,13 +382,12 @@ Can inform clinical judgment and supplement the recommendation from the DTR.
 
 #### "How did each of the above differ for patients with and without contraindications?"
 
-## Future Work
+For space reasons maybe a paragraph of text rather than the multiple
+tables/figures?
 
-### Future Analyses
-  - Additional protocol objectives: patient preferences, deep phenotyping,
-    and the 36-week outcome.
-  - Investigating "nearly optimal" treatment recommendations and predictors of response to treatment that are nearly as good as those in the primary analysis.
-  - Consortium-wide data analyses and integration.
+Throughout the whole analysis could report by Overall, No contraindications,
+with contraindications. This becomes an issue discussing the specific DTRs for
+those with contraindications.
 
 # 12-week Paper
 
@@ -349,6 +492,9 @@ As-randomized vs. DTR subgroup outcome comparison
 Figure Variable importance metrics
 
 ### Other variable importance metric figure
+
+
+
 E.g. Shapley values, one of the importance metrics for trees
 
 ## Discussion of results for 12-week PEG and PGIC
@@ -410,3 +556,7 @@ E.g. Shapley values, one of the importance metrics for trees
 ### Description of contraindicated populations for each treatment
 ### DTR assignments by contraindication
 ### Outcomes for those with contraindications
+
+# Statistical Methods
+
+## Predicting Response to Treatment
