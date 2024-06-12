@@ -407,7 +407,60 @@ tables/figures?
 fake_stage_one_wide <- FakeDataDescriptiveAnalyses(n.subj = 804)
 fake_stage_one_long <- TransformWideToLong(fake_stage_one_wide)
 ```
-### Simple table 12-week PEG and PGIC
+### 12-week Descriptive Outcomes Tables
+\begin{columns}
+\begin{column}{0.35\textwidth}
+ \begin{minipage}{\linewidth}
+\small
+```{r simple_descriptive_table, results = 'asis'}
+simple_results_tbl_df <- SummarizeDescriptiveOutcomes(fake_stage_one_long,
+    include_fivenum = FALSE
+) %>%
+    mutate(PrintMeanSd = paste0(round(Mean, 1), " (", round(SD, 1), ")"))
+
+
+simple_results_wide <- data.frame(
+    Treatment = simple_results_tbl_df$Trt[1:4],
+    PEG = simple_results_tbl_df[simple_results_tbl_df$Outcome == "PEG",]$PrintMeanSd,
+    PGIC = simple_results_tbl_df[simple_results_tbl_df$Outcome == "PGIC",]$PrintMeanSd
+)
+
+# Create the LaTeX table
+simple_latex_table <- simple_results_wide %>%
+    kable(format = "latex",
+          digits = 1,
+          booktabs = TRUE,
+          caption = "BEST Trial 12-week ITT Outcomes by Treatment Assignment") %>%
+  kable_styling(latex_options = c("striped", "hold_position","scale_down" ))
+
+# Print the LaTeX table
+print(simple_latex_table)
+```
+\end{minipage}
+\end{column}
+\hfill
+\begin{column}{0.65\textwidth}
+\begin{minipage}{\linewidth}
+\small
+```{r descriptive_table, results = 'asis'}
+results_tbl_df <- SummarizeDescriptiveOutcomes(fake_stage_one_long,
+                                               include_fivenum = TRUE
+)
+# Create the LaTeX table
+latex_table <- results_tbl_df %>%
+    kable(format = "latex",
+          digits = 1,
+          booktabs = TRUE,
+          caption = "BEST Trial 12-week ITT Outcomes by Treatment Assignment Descriptive Statistics") %>%
+  kable_styling(latex_options = c("striped", "hold_position", "scale_down"))
+
+# Print the LaTeX table
+print(latex_table)
+```
+\end{minipage}
+\end{column}
+\end{columns}
+
 
 ### Bean plot of 12-week PEG
 ```{r stageone_ggbean_peg, fig.height = 3.5, fig.width = 7, fig.cap='BEST Trial 12-week ITT PEG by Treatment Assignment'}
@@ -420,8 +473,12 @@ ThemePlot(ggbp_one)+ theme(panel.grid.minor = element_blank())
 ```
 
 ### Bean plot of 12-week PEG with quantiles
+\small
+Bean plots are an alternative to box plots that show all of the observations
+(the dots), and the probability density (the violin shapes) in addition to the
+median and lower & upper quartiles.
 
-```{r stageone_ggbean_peg_quantiles, fig.height = 3, fig.width = 6, fig.cap='BEST Trial 12-week ITT PEG by Treatment Assignment'}
+```{r stageone_ggbean_peg_quantiles, fig.height = 2.5, fig.width = 5, fig.cap='BEST Trial 12-week ITT PEG by Treatment Assignment'}
 ggbp_two <- GGBeanPlot(
     wide_data = fake_stage_one_wide,
     outcome_name = "PEG",
@@ -435,31 +492,118 @@ ggbp_peg_themed
 
 ### Bean plot of 12-week PGIC with quantiles
 
-```{r stageone_ggbean_pgic_quantiles, fig.height = 3, fig.width = 6, fig.cap='BEST Trial 12-week PGIC by Treatment Assignment (ITT)'}
+```{r stageone_ggbean_pgic_quantiles, fig.height = 3.5, fig.width = 7, fig.cap='BEST Trial 12-week PGIC by Treatment Assignment (ITT)'}
 ggbp_pgic <- GGBeanPlot(
     wide_data = fake_stage_one_wide,
     outcome_name = "PGIC",
     violin_quantiles = c(.25, .5, .75)
 )
 
-ggbp_pgic_themed <- ThemePlot(ggbp_pgic)+ theme(panel.grid.minor = element_blank())
+ggbp_pgic_themed <- ThemePlot(ggbp_pgic) + theme(panel.grid.minor = element_blank())
+ggbp_pgic_themed
 ```
 
 ### Bean plot of 12-week PEG and PGIC with quantiles
 
-```{r stageone_ggbean_grid_quantiles, fig.height = 3.25, fig.width = 7, fig.cap='BEST Trial 12-week ITT Outcomes by Treatment Assignment'}
+```{r stageone_ggbean_grid_quantiles, fig.height = 3.5, fig.width = 7, fig.cap='BEST Trial 12-week ITT Outcomes by Treatment Assignment'}
 gridExtra::grid.arrange(ggbp_peg_themed, ggbp_pgic_themed, ncol = 2)
 ```
 
 ## Predictors of Treatment Response
 ### Predictor magnitude figure
-Figure Variable importance metrics
+```{r trt_pred, warning = FALSE, message = FALSE}
+pred_summary_df <- FakeDataForPredictorSummary()
+pubr_pred <- PlotPredPubr(in.data = pred_summary_df)
+```
 
-### Other variable importance metric figure
+```{r pred_pubr, fig.height = 4, fig.width = 6, warning = FALSE, message = FALSE}
+pubr_pred
+```
+
+## What is the best treatment for each patient?
+
+### DTR Description - Common Interpretable Model Forms
+\begin{columns}
+\begin{column}{0.5\textwidth}
+Integer Scoring Models
+
+\begin{tabular}{@{}lll@{}}
+\toprule
+Characteristic      &  & Points \\ \midrule
+                    &  &        \\
+Age $\geq 65$       &  & +1     \\ \cmidrule(l){3-3}
+Depression          &  & +3     \\ \cmidrule(l){3-3}
+Duration $<5$ years &  & -2     \\ \cmidrule(l){3-3}
+Current Opioid Use  &  & +4     \\ \cmidrule(l){3-3}
+                    &  &        \\ \midrule
+Total Score         &  &        \\ \bottomrule
+\end{tabular}
+Total Score: $< 1$ recommend ESC, 1-4 recommend Duloxetine, 7+ recommend ACT
+\vfill
+
+Can be made to include multiple subscales where features belong to one subscale (e.g. PROs) which are then combined, or all features can be included in a single mdoel.
+\end{column}
+\hfill
+\begin{column}{0.5\textwidth}
+Tree-based methods
+\includegraphics[width=0.8\textwidth]{old/figure/pain-decision-tree}
+\end{column}
+\end{columns}
+
+Neither approach is universally superior, their relative performance depends on the underlying relationships.
+
+Trees often perform comparatively well in settings with many categorical features and higher-order interactions, and worse in settings with strong, smooth parametric relationships.
+
+### Estimated Improvement within subgroups defined by the DTR
+The features a DTR uses to recommend a treatment create a set of mutually distinct subgroups that encompass the entire patient population.
+\vfill
+
+We can investigate the expected improvement from receiving the recommended treatment versus receiving a random treatment.
+```{r results='asis'}
+# Create the data frame
+data <- tibble(
+    `Subgroup` =
+        c("Short Pain Duration", "Low self-efficacy", "Elderly & Extremely Long Pain Duration"),
+`Recommended Treatment` = c("EBEM", "ACT", "ESC"),
+    `Expected Improvement(%)` = c("+40%", "+25%", "+0%")
+)
+
+# Generate the table with enhanced aesthetic styling
+knitr::kable(data, format = "latex",
+          digits = 1,
+align = "c",
+col.names = c("Subgroup", "Recommendation", "Expected Improvement"),
+          booktabs = TRUE,
+caption = "Expected Relative Improvement in 12-week PGIC by subgroup using the Estimated Optimal DTR compared to Randomized Assignment") %>%
+kable_styling(latex_options = "striped")
+```
+\vfill
+
+Important note: This is a comparison between different ways of recommending treatments (with the study randomization being one way to assign treatments).
 
 
+\vfill
 
-E.g. Shapley values, one of the importance metrics for trees
+### Properties of Analyzing the DTR Subgroups
+\begin{itemize}
+\item Should have no or very small negative changes --- because these are the subgroups used to recommend a treatment, a negative change would imply that there's a better treatment for that subgroup, but that contradicts this being the estimated optimal DTR\footnote{Small negative values may be possible due to e.g. sample splitting}.
+
+\item This is only guaranteed for the subgroups defined by the DTR.
+
+Ex: If the estimated optimal DTR doesn't include current opioid use, there is no guarantee that
+
+\item The optimality of the estimated DTR does suggest that you couldn't improve outcomes for a subgroup without reducing the benefit for other groups
+
+\item Looking at single factors and holding everything else fixed can be misleading as patients have many correlated features.
+
+\end{itemize}
+
+### Stratified by assigned treatment?
+Requested by clinicians, but I don’t think this makes sense without subgroups because the populations will be different in the as-randomized and assigned by DTR groups. Note: Might be a way to get at what they want to know, think about it more.
+
+### Stratified by DTR subgroup (and treatment)
+As-randomized vs. DTR subgroup outcome comparison
+
 
 ## What is the benefit of incorporating patient features?
 
