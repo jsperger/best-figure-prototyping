@@ -15,7 +15,8 @@ BeanPlotOutcomeByTreatment <- function(wide_data, outcome_name, color_vec) {
   return(bp)
 }
 
-GGBeanPlot <- function(wide_data, outcome_name, timepoint_name = "12-week") {
+GGBeanPlot <- function(wide_data, outcome_name, timepoint_name = "12-week",
+                       violin_quantiles = NULL) {
   outcome_vals <- wide_data %>% pull(outcome_name)
   min_outcome <- min(outcome_vals)
   max_outcome <- max(outcome_vals)
@@ -23,12 +24,12 @@ GGBeanPlot <- function(wide_data, outcome_name, timepoint_name = "12-week") {
   base_plot <- ggplot(aes(x = factor(Trt), y = .data[[outcome_name]]), data = wide_data)
 
   bean_plot <- base_plot +
-    geom_violin() +
+    geom_violin(draw_quantiles = violin_quantiles) +
     geom_jitter(height = 0.25, width = 0.25, ) +
     scale_y_continuous(
       limits = c(min_outcome, max_outcome),
       breaks = seq(min_outcome, max_outcome, by = 1)
-    ) + labs(x = "Treatment", y = paste(timepoint_name, outcome_name)) +
+    ) + labs(x = "Assigned Treatment", y = paste(timepoint_name, outcome_name)) +
     theme(panel.grid.minor = element_blank())
 
   return(bean_plot)
