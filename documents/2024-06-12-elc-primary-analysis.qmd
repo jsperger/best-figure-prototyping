@@ -75,6 +75,7 @@ source("../code/03_plot_value_comparisons.R")
 source("../code/04_plot_dtr_assignments.R")
 source("../code/05_plot_forest_subgroups.R")
 source("../code/06_descriptive_plots.R")
+source("../code/101_plot_beibo.R")
 ```
 
 
@@ -520,11 +521,20 @@ pubr_pred <- PlotPredPubr(in.data = pred_summary_df)
 pubr_pred
 ```
 
+### Variable Importance
+
+```{r pred_beibo_importance, fig.height = 4, fig.width = 6, warning = FALSE, message = FALSE}
+pred_summary_df <- FakeDataForPredictorSummary()
+PlotVarImportance.BZ(pred_summary_df)
+```
+
+
 ## What is the best treatment for each patient?
 
 ### DTR Description - Common Interpretable Model Forms
 \begin{columns}
 \begin{column}{0.5\textwidth}
+\small
 Integer Scoring Models
 
 \begin{tabular}{@{}lll@{}}
@@ -538,10 +548,9 @@ Current Opioid Use  &  & +4     \\ \cmidrule(l){3-3}
                     &  &        \\ \midrule
 Total Score         &  &        \\ \bottomrule
 \end{tabular}
-Total Score: $< 1$ recommend ESC, 1-4 recommend Duloxetine, 7+ recommend ACT
-\vfill
 
-Can be made to include multiple subscales where features belong to one subscale (e.g. PROs) which are then combined, or all features can be included in a single mdoel.
+\tiny Total Score: $< 1$ recommend ESC, 1-4 recommend Duloxetine, 7+ recommend ACT
+\vfill
 \end{column}
 \hfill
 \begin{column}{0.5\textwidth}
@@ -549,16 +558,47 @@ Tree-based methods
 \includegraphics[width=0.8\textwidth]{old/figure/pain-decision-tree}
 \end{column}
 \end{columns}
+\small
+ Neither approach is universally superior: Trees often perform comparatively well in settings with many categorical features and higher-order interactions, and worse in settings with smooth, low-degree parametric relationships.
 
-Neither approach is universally superior, their relative performance depends on the underlying relationships.
+### Interpretable Modeling
 
-Trees often perform comparatively well in settings with many categorical features and higher-order interactions, and worse in settings with strong, smooth parametric relationships.
+Integer Scoring models and tree models can be forced to include multiple subscales where features belong to one subscale (e.g. PROs) which are then combined, or all features can be included in a single mdoel.
+
+
+The approach is based on Generalized Additive Models (GAMs)
+
+### Describing the DTR Recommendations
+## Characterizing the Treatment Recommendations
+Answers the question "What would following the treatment recommendations look
+like in practice?" or "Who do the people who are recommended an intervention
+look like?"
+
+```{r results='asis'}
+# Create the data frame
+data <- tibble(
+    `Predicted Treatment Assignments` =
+        c("Study Assignments", "PEG DTR", "PGIC DTR"),
+    Duloxetine = c("25%", "30%", "40%"),
+    ACT = c("25%", "70%", "10%"),
+    EBEM = c("25%", "0%", "40%"),
+    ESC = c("25%", "0%", "10%"),
+)
+
+# Generate the table with enhanced aesthetic styling
+knitr::kable(data, format = "latex",
+          digits = 1,
+align = "c",
+          booktabs = TRUE) %>%
+kable_styling(latex_options = "striped")
+```
+
+
 
 ### Estimated Improvement within subgroups defined by the DTR
 The features a DTR uses to recommend a treatment create a set of mutually distinct subgroups that encompass the entire patient population.
 \vfill
 
-We can investigate the expected improvement from receiving the recommended treatment versus receiving a random treatment.
 ```{r results='asis'}
 # Create the data frame
 data <- tibble(
@@ -598,12 +638,44 @@ Ex: If the estimated optimal DTR doesn't include current opioid use, there is no
 
 \end{itemize}
 
-### Stratified by assigned treatment?
-Requested by clinicians, but I don’t think this makes sense without subgroups because the populations will be different in the as-randomized and assigned by DTR groups. Note: Might be a way to get at what they want to know, think about it more.
+### Stratifying Results by Treatment Assignment is Unwise in this Context (WORDSMITH)
 
-### Stratified by DTR subgroup (and treatment)
-As-randomized vs. DTR subgroup outcome comparison
+``In the general population Duloxetine has a 30% success rate\footnote{ignoring that our outcomes aren't dichotomized}, but incorporating patient features it has a 50% success rate''
 
+```{r results='asis'}
+# Create the data frame
+data <- tibble(
+    `Outcome` =
+        c("PEG", "PGIC"),
+    Duloxetine = c("+50%", "+40%"),
+    ACT = c("+5%", "-10%"),
+    EBEM = c(NA, "+40%"),
+    ESC = c(NA, "-10%")
+)
+
+# Generate the table with enhanced aesthetic styling
+knitr::kable(data, format = "latex",
+          digits = 1,
+align = "c",
+          booktabs = TRUE,
+caption = "Expected Improvement in Outcome by Assigned Treatment for those Recommended Treatment compared to the Randomized Treatment Assignment") %>%
+kable_styling(latex_options = "striped")
+```
+
+The population of patients assigned to a treatment under the DTR will differ from the general patient population.
+
+### Stratifying by Treatment Assignment Continued
+A treatment may be the best treatment for a subgroup, but if patients in that subgroup have worse outcomes than the general patient population the success rate for that treatment would decrease under the DTR.
+
+\vfill
+
+Can't fix both the treatment and the subgroup, the conditional outcomes are the same---the expected improvement under Duloxetine for an individual does not depend on whether they received Duloxetine because they were randomized to it or because we think it's the best  treatment for them.
+\vfill
+
+Can't just take the predicted best responders and ignore the rest of the study population
+\vfill
+
+The estimated optimal DTR assigns each patient to the treatment with the largest predicted improvement in outcome given the patient's features.
 
 ## What is the benefit of incorporating patient features?
 
@@ -655,24 +727,21 @@ FWER is stricter and implies FDR control
 #### What $\alpha$-level
 
 
-### Value versus as-randomized outcomes (benefit at the population level)
-Figure, expected value under DTR vs. as-randomized
-
-Under this DTR what percentage of people do we expect to augment/maintain/switch?
-
-How does this compare to study assignments and responder categories?
-
-### Discussion of results for 12-week PEG and PGIC
-#### Differences in optimal DTRs?
-#### Differences in predictors of treatment response?
-
 ## Discussion of results for participants with contraindications
 ### Description of contraindicated populations for each treatment
 ### DTR assignments by contraindication
 ### Outcomes for those with contraindications
 
 # 24-week Paper
+
 ## Descriptive summary of trial results
+
+### Stage Two Treatment Assignments
+```{r trt_two_assignments, fig.height = 3, fig.width = 6, warning = FALSE, message = FALSE}
+dtr_assignments <- FakeDataForDTRAssignments()
+PlotTreatSqn.BZ(dtr_assignments) %>% ThemePlot(.)
+```
+
 ### As-randomized outcomes
 
 ## Model Descriptions
@@ -709,9 +778,6 @@ As-randomized vs. DTR subgroup outcome comparison
 ### Predictor magnitude figure
 Figure Variable importance metrics
 
-### Other variable importance metric figure
-E.g. Shapley values, one of the importance metrics for trees
-
 ## Discussion of results for 12-week and 24-week PEG
 ### Differences in optimal DTRs?
 ### Differences in predictors of treatment response?
@@ -733,12 +799,4 @@ Trees don't seem as popular as expected
 Table of included models
 (Appendix material most likely)
 
-### State the optimal DTRs for PEG and PGIC
-
-### Describe the (counterfactual) DTR assignments in the study population
-Under the DTR in this population what percentage of people do we expected to be
-assigned to each treatment?
-
-
-## Predicting Response to Treatment
 
