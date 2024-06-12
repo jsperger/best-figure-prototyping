@@ -43,7 +43,6 @@ header-includes:
 
 # Overview
 
-## R Library header for folding
 ```{r libs_and_scripts}
 # Load necessary libraries
 library(tidyverse)
@@ -89,6 +88,7 @@ source("../code/101_plot_beibo.R")
 4. 24-week manuscript mock tables and figures
 \vfill
 
+#### Tables and Figures
 The mock tables and figures for the 12- and 24-week manuscripts are formatted as
 they might appear in the manuscripts\footnote{Numbers are entirely made up and
 not based on preliminary data in any way.}.
@@ -577,7 +577,7 @@ look like?"
 ```{r results='asis'}
 # Create the data frame
 data <- tibble(
-    `Predicted Treatment Assignments` =
+    `Treatment Assignment Strategy` =
         c("Study Assignments", "PEG DTR", "PGIC DTR"),
     Duloxetine = c("25%", "30%", "40%"),
     ACT = c("25%", "70%", "10%"),
