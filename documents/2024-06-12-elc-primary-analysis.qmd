@@ -17,6 +17,7 @@ format:
     toc-title: Outline
     number-sections: true
     number-depth: 2
+    section-titles: true
     keep_tex: true
     mainfontoptions:
       - Numbers = Proportional
@@ -463,16 +464,6 @@ print(latex_table)
 \end{columns}
 
 
-### Bean plot of 12-week PEG
-```{r stageone_ggbean_peg, fig.height = 3.5, fig.width = 7, fig.cap='BEST Trial 12-week ITT PEG by Treatment Assignment'}
-ggbp_one <- GGBeanPlot(
-    wide_data = fake_stage_one_wide,
-    outcome_name = "PEG"
-)
-
-ThemePlot(ggbp_one)+ theme(panel.grid.minor = element_blank())
-```
-
 ### Bean plot of 12-week PEG with quantiles
 \small
 Bean plots are an alternative to box plots that show all of the observations
@@ -523,7 +514,7 @@ pubr_pred
 
 ### Variable Importance
 
-```{r pred_beibo_importance, fig.height = 4, fig.width = 6, warning = FALSE, message = FALSE}
+```{r pred_beibo_importance, fig.height = 3, fig.width = 4, warning = FALSE, message = FALSE}
 pred_summary_df <- FakeDataForPredictorSummary()
 PlotVarImportance.BZ(pred_summary_df)
 ```
@@ -737,7 +728,7 @@ FWER is stricter and implies FDR control
 ## Descriptive summary of trial results
 
 ### Stage Two Treatment Assignments
-```{r trt_two_assignments, fig.height = 3, fig.width = 6, warning = FALSE, message = FALSE}
+```{r trt_two_assignments, fig.height = 3.5, fig.width = 9, warning = FALSE, message = FALSE}
 dtr_assignments <- FakeDataForDTRAssignments()
 PlotTreatSqn.BZ(dtr_assignments) %>% ThemePlot(.)
 ```
