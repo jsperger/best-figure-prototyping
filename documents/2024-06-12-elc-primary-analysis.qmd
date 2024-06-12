@@ -185,14 +185,6 @@ Ex: Only one of anxiety and depression may be labeled as important depending on
   discovery-focused, need to preempt misinterpretation of results as certainties
   from the ``magic box'' of machine learning.
 \vfill
-
-\item Concerns that decision-lists or trees convey a high-level of certainty.
-\vfill
-
-\item There is no independent test data set (though we apply appropriate
-statistical methods to account for the flexible modeling process).
-\vfill
-
 Yes: If successful, a clinician could reasonably justify applying the DTR published
 in the manuscript in their clinic. The trial provides valid evidence by virtue
 of appropriately accounting for hypothesis-generation and modeling flexibility,
@@ -201,17 +193,26 @@ and treatments are all currently used in clinical practice and efficacious.
 No: The trial provides conclusive evidence and no further research is needed to
 confirm that the estimated DTR is optimal.
 
-Yes:
+\vfill
+\item Concerns that decision-lists and trees convey a high-level of certainty.
+\vfill
+
+\item There is no independent test data set (though we apply appropriate
+statistical methods to account for the flexible modeling process).
+\vfill
+
 \end{itemize}
 
 ### Future Confirmatory Studies (Drop or move to appendix?)
 A ``Phase III'' confirmatory trial which randomizes patients to receive
 treatment according to the estimated DTR vs. receiving treatment by some
 appropriate comparison method
-- Randomization
-- Clinical judgment without access to the DTR
-- Clinical judgment where the clinician has information about the treatment the
-  DTR estimates is optimal and an explanation for the algorithm's decision.
+\begin{itemize}
+\item Clinical judgment without access to the DTR
+\item Clinical judgment where the clinician has information about the treatment the DTR estimates is optimal and an explanation for the algorithm's decision.
+
+\item Randomization
+\end{itemize}
 
 \vfill \pause
 Similar trials happen in fields such as implementation science, but the
@@ -269,29 +270,33 @@ the effectiveness of acupuncture.
 
 ### Analysis as Scientific Questions
 \begin{enumerate}
-\item ``What were the observed outcomes in the trial?''
+\item What were the observed outcomes in the trial?
 \vdots
 
 \setcounter{enumi}{4}
 
-\item ``How did each of the above differ for patients with and without contraindications?"
+\item How did each of the above differ for patients with and without contraindications?"
 \end{enumerate}
 
 \vfill
 
+The ordering of the following three items could be changed and two options are
+on the next slide.
+
+\vfill
 \begin{itemize}
-\item ``What is the benefit of incorporating patient features?''
+\item What is the benefit of incorporating patient features?
 \vfill
 
-\item ``For a specific patient, what is the best treatment?''
+\item For a specific patient, what is the best treatment?
 \vfill
 
-\item ``For a specific treatment, what patient features predict response to
-treatment?''
+\item For a specific treatment, what patient features predict response to
+treatment?
 \vfill
 \end{itemize}
 
-
+Each of these questions has at least one corresponding figure or table in the manuscript.
 
 ### Analysis Question Ordering
 
@@ -299,16 +304,16 @@ treatment?''
 
 \begin{columns}
 \begin{column}{0.5\textwidth}
-\textbf{``Sequential ordering''}
+\textbf{Sequential ordering}
 \begin{enumerate}
-\item ``For a specific treatment, what patient features predict response to
-treatment?''
+\item For a specific treatment, what patient features predict response to
+treatment?
 \vfill
 
-\item ``For a specific patient, what is the best treatment?''
+\item For a specific patient, what is the best treatment?
 \vfill
 
-\item ``What is the benefit of incorporating patient features?''
+\item What is the benefit of incorporating patient features?
 \vfill
 
 \end{enumerate}
@@ -316,16 +321,16 @@ treatment?''
 \hfill
 \begin{column}{0.5\textwidth}
 
-\textbf{``Headline ordering''}
+\textbf{Headline ordering}
 \begin{enumerate}
-\item ``What is the benefit of incorporating patient features?''
+\item What is the benefit of incorporating patient features?
 \vfill
 
-\item ``For a specific patient, what is the best treatment?''
+\item For a specific patient, what is the best treatment?
 \vfill
 
-\item ``For a specific treatment, what patient features predict response to
-treatment?''
+\item For a specific treatment, what patient features predict response to
+treatment?
 \vfill
 \end{enumerate}
 \end{column}
@@ -337,58 +342,62 @@ treatment?''
 
 ### Analysis as Scientific Questions Details
 
-#### "What were the observed outcomes in the trial?"
+#### What were the observed outcomes in the trial?
+\small
 Descriptive summary of the as-randomized outcomes
 \vfill \pause
+#### For a specific treatment, what patient features predict response to treatment?
+\small
+\begin{itemize}
+\item Addressed using variable importance plots for predictors of treatment
+response.
 
-#### "What is the benefit of incorporating patient features?"
+\item No statistical inference for individual predictors.
+
+\item Important for future research into new treatments and treatment mechanisms
+as well as for identifying patients who are unlikely to have successful response to
+any of the current treatment options.
+
+\item Can inform clinical judgment and supplement the recommendation from the DTR.
+\end{itemize}
+\vfill
+
+### Analysis as Scientific Questions Details
+
+#### For a specific patient, what is the best treatment?
+
+\begin{itemize}
+\item Describe the DTR. For an interpretable DTR this can be directly communicated. Complex DTRs require a computer.
+
+\vfill
+
+\item What is the estimated impact of applying the DTR including the proportion of
+patients assigned to each treatment and changes in treatment efficacy. Will includea basic algorithmic bias assessment in the appendix.
+\vfill
+
+\item Could discuss the expected improvement in PEG for subgroups of patients. The expected improvement in the population is the next question.
+\end{itemize}
+
+\vfill \pause
+#### What is the benefit of incorporating patient features?
 
 Hypothesis test of the value of the estimated optimal DTR compared to the
 as-randomized outcomes.
 \vfill \pause
 
+### Contraindications
 
-#### "For a specific patient, what is the best treatment?"
-
-What is the DTR? For an interpretable DTR this can be calculated by hand. More
-complex models require a computer.
+#### How did each of the above differ for patients with and without contraindications?
+Participants with contraindications are included in the primary analyses.\footnote{With techniques such as weighting used to account for different randomization probabilities when there are restrictions.}
 \vfill
 
-What is the estimated impact of applying the DTR including the proportion of
-patients assigned to each treatment and changes in treatment efficacy.
+Throughout the whole analysis could report: Overall, No contraindications,
+with contraindications. This doesn't cost much space for any study-population-level summary, but could be an issue if the DTRs differ substantially by contraindication.
+
 \vfill
-
-If successful, a clinician could reasonably justify applying the DTR published
-in the manuscript in their clinic. A further confirmatory trial would be needed
-for a higher level of certainty, but these are all treatments in use and if
-successful provide evidence supporting the use of the DTR.
-
-
-### Analysis as Scientific Questions Details
-
-#### "For a specific treatment, what patient features predict response to treatment?"
-
-For each treatment, which features most strongly predict whether a patient will
-respond to the treatment? Answered using variable importance plots for
-predictors of treatment response.
-
-Important for future research into new treatments and treatment mechanisms as
-well as for identifying patients who are unlikely to have successful response to
-any of the current treatment options.
-
-Can inform clinical judgment and supplement the recommendation from the DTR.
-
-\vfill \pause
-
-
-#### "How did each of the above differ for patients with and without contraindications?"
-
 For space reasons maybe a paragraph of text rather than the multiple
 tables/figures?
 
-Throughout the whole analysis could report by Overall, No contraindications,
-with contraindications. This becomes an issue discussing the specific DTRs for
-those with contraindications.
 
 # 12-week Paper
 
