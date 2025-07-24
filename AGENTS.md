@@ -230,4 +230,13 @@ You also have a convenience function alias `dock_r` e.g. `dock_r -e 'print(paste
           keywords it can be classified to.
 
 # Repository Overview
+## tidymodels plotting functions
+The file `code/98_plot_tidymodels.R` contains `autoplot` methods for various objects to produce `tidymodels`-compliant plots. These functions are designed to be generic and work with the standardized outputs of `broom::tidy()` and `recipes::tidy()`.
+
+The following `autoplot` methods are available:
+- `autoplot.predictor_importance`: Creates a lollipop chart to visualize variable importance.
+- `autoplot.value_comparison`: Creates a dot plot to compare treatment policy values.
+- `autoplot.dtr_assignments`: Creates a Sankey diagram to visualize DTR assignments.
+- `autoplot.subgroup_forest`: Creates a forest plot to visualize subgroup treatment effects.
+
 ## Directory Structure
