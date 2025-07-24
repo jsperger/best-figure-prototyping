@@ -4,7 +4,8 @@ BeanPlotOutcomeByTreatment <- function(wide_data, outcome_name, color_vec) {
   outcome_vals <- wide_data %>% pull(outcome_name)
 
   bp_formula <- as.formula(paste0(outcome_name, " ~ Trt"))
-  bp <- beanplot::beanplot(bp_formula,
+  bp <- beanplot::beanplot(
+    bp_formula,
     data = wide_data,
     cutmin = min(outcome_vals),
     cutmax = max(outcome_vals),
@@ -15,13 +16,20 @@ BeanPlotOutcomeByTreatment <- function(wide_data, outcome_name, color_vec) {
   return(bp)
 }
 
-GGBeanPlot <- function(wide_data, outcome_name, timepoint_name = "12-week",
-                       violin_quantiles = NULL) {
+GGBeanPlot <- function(
+  wide_data,
+  outcome_name,
+  timepoint_name = "12-week",
+  violin_quantiles = NULL
+) {
   outcome_vals <- wide_data %>% pull(outcome_name)
   min_outcome <- min(outcome_vals)
   max_outcome <- max(outcome_vals)
 
-  base_plot <- ggplot(aes(x = factor(Trt), y = .data[[outcome_name]]), data = wide_data)
+  base_plot <- ggplot(
+    aes(x = factor(Trt), y = .data[[outcome_name]]),
+    data = wide_data
+  )
 
   bean_plot <- base_plot +
     geom_violin(draw_quantiles = violin_quantiles) +
@@ -29,7 +37,8 @@ GGBeanPlot <- function(wide_data, outcome_name, timepoint_name = "12-week",
     scale_y_continuous(
       limits = c(min_outcome, max_outcome),
       breaks = seq(min_outcome, max_outcome, by = 1)
-    ) + labs(x = "Assigned Treatment", y = paste(timepoint_name, outcome_name)) +
+    ) +
+    labs(x = "Assigned Treatment", y = paste(timepoint_name, outcome_name)) +
     theme(panel.grid.minor = element_blank())
 
   return(bean_plot)
@@ -42,8 +51,10 @@ PlotStackedBarChartByTreatment <- function(bar_data) {
   }
   # Define pattern types
   pattern_types <- c(
-    "1" = "stripe", "2" = "crosshatch",
-    "3" = "circle", "4" = "none"
+    "1" = "stripe",
+    "2" = "crosshatch",
+    "3" = "circle",
+    "4" = "none"
   )
 
   # Create the stacked bar chart
@@ -57,8 +68,10 @@ PlotStackedBarChartByTreatment <- function(bar_data) {
     )
   ) +
     geom_bar_pattern(
-      stat = "identity", position = "stack",
-      pattern_density = 0.1, pattern_spacing = 0.02,
+      stat = "identity",
+      position = "stack",
+      pattern_density = 0.1,
+      pattern_spacing = 0.02,
       pattern_key_scale_factor = 0.6
     ) +
     ggpattern::scale_pattern_manual(values = pattern_types) +
